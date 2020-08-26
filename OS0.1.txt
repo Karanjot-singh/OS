@@ -1,0 +1,20 @@
+The gcc compiler indergoes through 4 steps to convert the file into an executable:
+
+1. pre-processing  - Comments are removed, header files and Macros are expanded
+
+	//command: cpp hello.c > hello.i
+	gcc -E hello.c
+	
+2.Compilation
+	//command: gcc -S hello.i
+	gcc -S hello.c
+
+3. Assembly step
+	//command: as -o hello.o hello.s
+	gcc -c HelloWorld.c -o HelloWorld.o
+
+4. Linking: GCC does dynamic linking
+	//command: ld -o hello.exe hello.o ...libraries...
+	gcc -o hello hello.c 
+	
+	
