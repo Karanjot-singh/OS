@@ -3,7 +3,7 @@
 
 #include<stdio.h>
 
-extern int Addition(int a , int b);
+extern int Addition(int a , int b); //To link the assembly file with the Addition Function
 
 int main(int argc, char *argv[]){
 	int num1, num2;
@@ -11,7 +11,7 @@ int main(int argc, char *argv[]){
 	scanf("%d",&num1);
 	printf("Enter num2 : ");
 	scanf("%d",&num2);
-	int sum =Addition(num1,num2);	
+	int sum =Addition(num1,num2);	// function call with return
 	printf("\nThe Sum is: %d \n" , sum);
 
 	return 0;
