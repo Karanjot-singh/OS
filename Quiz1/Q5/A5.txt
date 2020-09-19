@@ -1,0 +1,6 @@
+Given the limitations of the RAM , I would prefer real mode as it  is more convenient.
+In the real Mode:
+There is a segment memory addressing technique. Each segment takes upto 64KB.
+In Long Mode:
+64 bit instructions can only be used in this mode. 16-bit instructions are disabled and no segmentation is used by x86-64 in this mode.
+
