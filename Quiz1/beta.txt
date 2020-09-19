@@ -1,8 +1,8 @@
 //fixed inputs
 Q1
 
-Q2
-
+Q2	cmmand : gcc Q2.c
+		
 /home/karan/Desktop/Sem/OS/Quiz1/try.c:7:2: warning: return type defaults to ‘int’ [-Wimplicit-int]
     7 |  add(float a , float b) {
       |  ^~~
@@ -25,7 +25,13 @@ Noncompliant Code Example (Implicit Return Type)
 Do not declare a function with an implicit return type. For example, if a function returns a meaningful integer value, declare it as returning int. If it returns no meaningful value, declare it as returning void.
 
 Q3
-simple ptr se int *p = &a *p=1 ya malloc
+
+1.If you want to store a random integer in this char array, then you should get the pointer to the index that you want to store the integer and cast it to an integer pointer and use it like that.
+
+char mychars[10];
+int * intlocation = (int*)(&mychar[5]);
+*intlocation = 3632; // stores 3632
+Beware that this will write to 4 bytes(4 char locations in your array) starting from the index you have specified. You should always check you are not going out of array.Also you should do the same casting for retrieving the value when needed.
 
 Q4
 
