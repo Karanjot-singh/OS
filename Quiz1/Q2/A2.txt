@@ -1,0 +1,17 @@
+Command to execute the given code
+gcc -Wall -Wextra -g Q2.c
+
+Errors:
+1. in function `_start': (.text+0x24): undefined reference to `main'
+	=> No main function is defined for the given C Program 
+2. in function `add':
+/home/karan/Desktop/Sem/OS/Quiz1/Q2.c:8: undefined reference to `round'
+	=> Missing definition of round function
+
+Warnings:
+1.warning: return type defaults to ‘int’ [-Wimplicit-int]
+	=> funciton add is not assigned a return value even though it returns int.
+2.warning: implicit declaration of function ‘round’ [-Wimplicit-function-declaration]
+	=> Missing definition of round
+3.warning: incompatible implicit declaration of built-in function ‘round’
+	=> Function round is not defined and <math.h> is not imported.

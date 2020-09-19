@@ -1,6 +1,6 @@
 
-//run nasm -f elf32 P4_1.asm -o P4_1.o && gcc -m32 P4.c P4_1.o -o sum1 && ./sum1
-//run nasm -f elf64 P4_2.asm -o P4_2.o && gcc P4.c P4_2.o -o sum2 && ./sum2
+//run nasm -f elf32 P4_1.asm -o P4_1.o && gcc -m32 P4.c P4_1.o -o long_add && ./long_add
+//run nasm -f elf64 P4_2.asm -o P4_2.o && gcc P4.c P4_2.o -o extended_add && ./extended_add
 
 #include<stdio.h>
 
