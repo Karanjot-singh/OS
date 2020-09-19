@@ -1,6 +1,12 @@
-Given the limitations of the RAM , I would prefer real mode as it  is more convenient.
+Given the limitations of the RAM , I would prefer real mode as it is more convenient  and the 64bit long mode is not required for a system of the given configuration .
 In the real Mode:
-There is a segment memory addressing technique. Each segment takes upto 64KB.
+Max capacity for RAM was 64KB but There is a segment memory addressing technique due to which upto 1MB can be utilised. Each segment takes upto 64KB.
+This mode lacks:
+Memory protection
+Multitasking
+priveleged process modes
+
 In Long Mode:
+Very high theoretical limits of RAM
 64 bit instructions can only be used in this mode. 16-bit instructions are disabled and no segmentation is used by x86-64 in this mode.
 

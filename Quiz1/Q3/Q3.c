@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
 	for (int i = 0; i < 16; ++i){
 	    int *p2 = (int*)(x); // New pointer of type int points to base of the array
 		*(p2+i) = n+i; // Storing the value in the character array
-		printf("%ld\n",*(p2+i) ); //Printing the value of integers inside  the array
+		printf("%d\n",*(p2+i) ); //Printing the value of integers inside  the array
 	}
 	return 0;
 }

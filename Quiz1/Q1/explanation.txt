@@ -1,3 +1,6 @@
+Yes , The main() can call the checkGreater() function.
+the -nostdlib flag used with the gcc command passes only those files to the linker which are explicitly specified, Hence there is no clash between the main and _start methods.
+This suggests that more than one entry points are possible to co-exist.
 
 To run assembly file directly:
 nasm -felf64 Q1.asm && ld Q1.o && ./a.out
