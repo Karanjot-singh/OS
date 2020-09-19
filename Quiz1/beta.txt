@@ -36,7 +36,7 @@ Beware that this will write to 4 bytes(4 char locations in your array) starting 
 Q4
 
 Q5
-
+16 bit
 https://wiki.osdev.org/Memory_Map_(x86)	
 
 Q6
