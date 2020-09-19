@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
 
     //Loop to store 64 bit ints
 	for (int i = 0; i < 8; ++i){
-	    long int *p1 = (long int*)(x); //New pointer of type int points to base of the array
+	    long int *p1 = (long int*)(x); //New pointer of type int (typecast) points to base of the array
 		*(p1+i) = l+i;// Storing the value in the character array
 		printf("%ld\n",*(p1+i) );//Printing the value of integers inside  the array
 	}

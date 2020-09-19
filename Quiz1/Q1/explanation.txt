@@ -1,9 +1,28 @@
+A program can have more than one entry point as shown in the files attached. But, we have to specify the entry point which we want to use at a particular file. This is done by --entry=main and --entry=_start flags with the gcc command in our example.
+
+Description of the programs:
+1)	with main():
+	The C file contains a main method which passes 2 int arguments to the checkGreater Directly (with the rsi and rdi registers) without the use of the _start method in the assembly program. checkGreater() is called.
+
+2)	with _start:
+	In the assembly program, the _start method store the constants num1 and num 2 in rdi and rsi registers respectively and checkGreater() is called. 
+
+checkGreater():
+This function compares the values inside the rsi and rdi registers (received from either of the two ways as mentioned above) and branches to _Greater if rsi>rdi and prints 1 and exits else it calls _notGreater and prints 0 and exits
+
 Yes , The main() can call the checkGreater() function.
-the -nostdlib flag used with the gcc command passes only those files to the linker which are explicitly specified, Hence there is no clash between the main and _start methods.
-This suggests that more than one entry points are possible to co-exist.
+The -nostdlib flag used with the gcc command passes only those files to the linker which are explicitly specified, Hence there is no clash between the main and _start methods. This suggests that more than one entry points are possible to co-exist.
 
-To run assembly file directly:
-nasm -felf64 Q1.asm && ld Q1.o && ./a.out
 
-To run checkGreater from c program
-make
+Instructions to run:
+$ make
+
+To run assembly file directly with _start as entry point:
+
+$ ./startCheckGreater 
+// Arguments passed are 5 and 3 since 5>3 it prints 1
+
+To run checkGreater from c program with main() as entry point:
+
+$ ./mainCheckGreater 
+// Arguments passed are 13 in rdi and 7 and rsi since  7<13 prints 0

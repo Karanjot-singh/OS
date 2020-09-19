@@ -1,4 +1,5 @@
 //This program is an example of file handling in C to store the string as a text file in the disk.
+
 #include<stdio.h>
 #include<stdlib.h>
 int main(int argc, char *argv[]){

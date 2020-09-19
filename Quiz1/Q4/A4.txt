@@ -1,14 +1,17 @@
 Yes, A change is required in the files. Any attempt to run the same code leads to an error
 P4_1.asm:13: error: instruction not supported in 64-bit mode
 
-This is because 32bit assembly(eax, etc) and 64 bit assembly(rax, etc) use a different set of registers, Also, Arguments from A c program can be directly written to registers in 64 bit but we need to pass the arguments to stack for 32 bits.
+This is because 32bit assembly(eax, etc) and 64 bit assembly(rax, etc) use a different set of registers, Also, In case of x64, Arguments from A C program can be directly written to registers according to the calling convention in the order rdi, rsi, rdx, rcx, r8, r9 for integer values.
+For x86, The arguments from a function call from inside a C program are passed to the stack and accesed by the assembly
+
+32 bit programs can run on 64 bit but 64 bit programs can not run on a system of 32 bits.
 
 
 Instructions to execute:
 
-sudo apt-get install gcc-multilib
-make
-./long_add
-./extended_add
+$ sudo apt-get install gcc-multilib
+$ make
+$ ./long_add	// To run in 32 bit Assembly
+$ ./extended_add //  To run 32bit program in 64 bit Assembly
 
 
