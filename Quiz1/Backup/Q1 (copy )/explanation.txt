@@ -1,6 +1,0 @@
-
-To run assembly file directly:
-nasm -felf64 Q1.asm && ld Q1.o && ./a.out
-
-To run checkGreater from c program
-make
