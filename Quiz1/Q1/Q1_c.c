@@ -6,7 +6,6 @@
 extern void checkGreater(); //To link the assembly file with the Addition Function
 
 
-int main(int argc, char *argv[]){
+void main(int argc, char *argv[]){
 	checkGreater();
-	return 0;
 }

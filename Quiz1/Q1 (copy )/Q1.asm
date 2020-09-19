@@ -4,13 +4,23 @@
           global checkGreater
 
           section   .text
-_start:             
+_start:   
+          push      rbp                     ;
+          mov       rbp, rsp                ;
+          ;sub       rsp, 8                  
+          ;mov       [rbp - 4], [num1]       
+          ;mov       [rbp - 8], [num2]       
+          ;push      [rbp - 4]                  ;
+          ;push      [rbp - 8]                  ;
+          push       5
+          push       3                           ;call(3,5)
           call      checkGreater
           
-checkGreater:
-          mov       rdi, num1               ;3
-          mov       rax, num2               ;5
-          cmp       rax, rdi                ;5
+checkGreater:   
+          push      rbp                     ;
+          mov       rbp, rsp               
+          mov       rax, [rbp+8]            ;3
+          cmp       rax, [rbp+12]           ;5
           jg        _Greater
           jmp       _notGreater
 
@@ -36,5 +46,5 @@ exit:
           section   .data
 messag1:  db        "1", 10      ;
 messag0:  db        "0", 10      ;
-num1:     dq        3
-num2:     dq        5      
+;num1:     dq        3
+;num2:     dq        5      
