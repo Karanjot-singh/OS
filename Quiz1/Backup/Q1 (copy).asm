@@ -12,14 +12,14 @@ _start:
           ;push      [rbp - 4]                  ;
           ;push      [rbp - 8]                  ;
           push       5
-          push       3
+          push       3                           ;call(3,5)
           call      _checkGreater
           
 _checkGreater:   
           push      rbp                     ;
-          mov       rbp, rsp                ;fix
-          mov       rax, [rbp+12]            ;3
-          cmp       rax, [rbp+8]           ;5
+          ;mov       rbp, rsp               
+          mov       rax, [rbp+8]            ;3
+          cmp       rax, [rbp+12]           ;5
           jg        _Greater
           jmp       _notGreater
 
