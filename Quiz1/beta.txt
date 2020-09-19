@@ -34,6 +34,19 @@ int * intlocation = (int*)(&mychar[5]);
 Beware that this will write to 4 bytes(4 char locations in your array) starting from the index you have specified. You should always check you are not going out of array.Also you should do the same casting for retrieving the value when needed.
 
 Q4
+sudo apt-get install gcc-multilib
+nasm -f elf32 P4_1.asm -o P4_1.o && gcc -m32 P4.c P4_1.o -o sum1 && ./sum1
+
+part 2
+Yes , change is required 
+//run nasm -f elf64 P4_1.asm -o P4_1.o && gcc P4.c P4_1.o -o sum1 && ./sum1
+
+throws error 
+P4_1.asm:13: error: instruction not supported in 64-bit mode
+
+
+nasm -f elf64 P4_2.asm -o P4_2.o && gcc P4.c P4_2.o -o sum2 && ./sum2
+
 
 Q5
 16 bit
