@@ -21,7 +21,24 @@ void getData(char buffer[]){
     token = strtok(NULL,",");
       
    }	   
-} 
+}
+void processData(char buffer[]){
+   char *token;
+   char *buff;
+   int ct=0;
+   	token = strtok(buffer,"\n" );
+   while(token!=NULL){ 
+ 	ct++;
+	printf( "%s\n",token);
+    token = strtok(NULL,"\n");
+	// strcat(buff,token); 
+       
+   }
+	// printf( "%s\n",buff);
+
+   // getData(buff);	   
+}
+
 
 int main(){
 	pid_t pid;
@@ -47,7 +64,8 @@ int main(){
 	    // for(int i =0 ; i<10000;i++){
 	    // 	printf("%c\n",content[i] );
 	    // }
-	    getData(content);
+	    // getData(content);
+	    processData(content);
 	    // printf("%s\n",content);
 	    // write(1,stdout,bytes);
 	    close(fd);
