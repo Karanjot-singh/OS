@@ -4,6 +4,25 @@
 #include<stdlib.h> 
 #include<sys/wait.h> 
 #include <sys/types.h>
+#include<string.h>
+
+void getData(char buffer[]){
+   char *token;
+   int ct=0;
+   	token = strtok(buffer,"," );
+
+   for (int i = 0; i < 6; ++i)
+   {
+   	 token = strtok(NULL,",");
+   }
+   while(token!=NULL){ 
+ 	ct++;
+	printf( "%s\n",token);
+    token = strtok(NULL,",");
+      
+   }	   
+} 
+
 int main(){
 	pid_t pid;
 	int status;
@@ -16,17 +35,21 @@ int main(){
 
 	else if(pid ==0){
 	//child process
-		char content[400];
-		int fd = open("", O_RDONLY );
-		if ( fd < 0 )
-        return 1;
+		char content[10000];
+		int fd = open("file.csv", O_RDONLY );
+		if ( fd < 0 ){
+       	 return 1;
+       	 printf("Error\n");
+    }
 
-	    off_t fileLength = lseek( fd, 0, SEEK_END );  // goes to end of file
-	    if ( fileLength < 0 )
-	        return 1;
 	    ssize_t bytes = read (fd,content,sizeof(content)-1);
-	    content[400]='\0';
-	    write(1,content,bytes);
+	    content[10000]='\0';
+	    // for(int i =0 ; i<10000;i++){
+	    // 	printf("%c\n",content[i] );
+	    // }
+	    getData(content);
+	    // printf("%s\n",content);
+	    // write(1,stdout,bytes);
 	    close(fd);
 		exit(0);
 	}
@@ -46,36 +69,25 @@ int main(){
 // #include<stdio.h> 
 // #include<conio.h> 
 // #include<String.h> 
-// void getData(char *buff); 
+// void getData(char *buffer); 
 // int main() 
 // { 
 // 	FILE *fp = fopen("D:\\Test.csv","r"); 
 //     int count=0; 
 // 	do 
 // 	{ 
-// 	 char buff[1024]; 
-// 	 fgets(buff, 1024, (FILE*)fp); 
+// 	 char buffer[1024]; 
+// 	 fgets(buffer, 1024, (FILE*)fp); 
 // 	 count++; 
 // 	 if(count != 1) 
 // 	 { 
-// 	  printf(buff); 
-// 	  getData(buff); 
+// 	  printf(buffer); 
+// 	  getData(buffer); 
 // 	 } 
 // 	 getch(); 
 // 	}while((getc(fp))!=EOF); 
  
 	 
 // } 
-// void getData(char buff[]) 
-// { 
-//    char *token = strtok(buff,","); 
-//    int counter=0; 
- 
-//    while( token != NULL )  
-//    { 
-//  counter++;  
-// printf( " %s\n",token); 
-//       token = strtok(NULL,","); 
-//    }	   
-// } 
+
 
