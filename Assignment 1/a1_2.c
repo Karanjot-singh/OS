@@ -4,6 +4,7 @@
 #include<sys/wait.h> 
 #include <sys/types.h>
 
+//cat ne ls im
 // Your task is to design your a simple shell that can handle five, internal commands –
  // ‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’. These commands
 // external commands – ‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’.

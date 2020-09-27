@@ -1,66 +1,33 @@
-#include <stdio.h>
-#include <unistd.h>
-#include<stdlib.h> 
-#include<sys/wait.h> 
-#include <sys/types.h>
+#include <stdio.h> 
+#include <string.h>
+#define MAX_LIMIT 20 
 
-// Your task is to design your a simple shell that can handle five, internal commands –
- // ‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’. These commands
-// external commands – ‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’.
+//input code for commands
+int main() 
+{ 
+    char str[MAX_LIMIT];
+    char cmd[MAX_LIMIT];
+    char arg[MAX_LIMIT];
+    char flag[MAX_LIMIT];
 
+    fgets(str, MAX_LIMIT, stdin);
+    printf("%s", str);
+    char *token;
+    int ct=0;
+    token = strtok(str," " );
+    strcpy(cmd,token);    
+    printf( "%s\n",token);
+    token = strtok(NULL," ");
 
-void display(){
-	printf("---Terminal---\n Available commands:\n‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’\n‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’\n" );
+    strcpy(arg,token);
+    printf( "%s\n",token);
+    token = strtok(NULL," ");
 
-}
-int main(){
-	display();	
-	printf("Enter command number: \n");
-	int choice,loopf =1;
-	while(loopf){ 
-		scanf("%d",&choice);
-		if(choice>=1 && choice <=10){
-			printf("Command selected!\n");
-		}
-		else
-			printf("Enter valid command number!!\n");
-	}
-	switch(choice){
-		case 1:{
-
-		}
-		case 2:{
-			
-		}
-		case 3:{
-			
-		}
-		case 4:{
-			
-		}
-		case 5:{
-			
-		}
-		case 6:{
-			
-		}
-		case 7:{
-			
-		}
-		case 8:{
-			
-		}
-		case 9:{
-			
-		}
-		case 10:{
-			
-		}
-
-	}
-
-
-
-
-	return 0;
-}
+    while(token!=NULL){ 
+    strcpy(flag,token);
+    printf( "%s\n",token);
+    token = strtok(NULL," ");
+    }
+ 
+    return 0; 
+} 

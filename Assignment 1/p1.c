@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -52,12 +53,20 @@ int main(){
 
 	else if(pid ==0){
 	//child process
-		char content[10000];
+
+
 		int fd = open("file.csv", O_RDONLY );
 		if ( fd < 0 ){
        	 return 1;
        	 printf("Error\n");
-    }
+    	}
+
+    	int loop =1;
+    	while(loop){
+			char content[100];
+			read(fd,content,1);
+			if(strcmp())
+    	}
 
 	    // ssize_t bytes = read (fd,content,sizeof(content)-1);
 	    read (fd,content,sizeof(content)-1);
