@@ -66,32 +66,35 @@ int main(){
 	    read (fd,content,sizeof(content)-1);
 
 	    content[7000]='\0';
-	    char buff[100];
 	    int count =0;
+	    
+    	int prev_index=0;
+    	int char_count=0;
 	    for(int i =0 ; i<7000;i++){
-	    	printf("%c",content[i] );
+	    	// printf("%c",content[i] );
 
-	    	// while(content[i]=='\n'){
-	    	// 	char buff[100];
-	    	// 	buff[i]=content[i];
+	    	if (content[i]=='\n')
+	    	{	
+	    		// printf("p%d c%d\n",prev_index,char_count );
+			    char buff[100];
+			    strncat(buff,&content[prev_index],char_count);
+			    printf("%s\n",buff);
+			    prev_index+=char_count+1;
+			    char_count=0;
+			    strcpy(buff,"");
 
-	    	// }
-	    	// if (content[i]=='\n')
-	    	// {	count++;
-	    	// 	if(count==2){
-
-	    	// 	}
-	    	// 	printf("%s\n",buff );
-	    	// 	strcpy(buff,"");
-	    	// }
-	    	// else{
-	    	// 	buff[i]=content[i];
-	    	// }
+	    	}
+	    	else if(content[i]=='@'){
+	    		char temp[100];
+	    		strncat(temp,&content[prev_index],char_count);
+			    printf("%s\n",temp);
+			    prev_index+=char_count+1;
+			    char_count=0;
+	    		break;
+	    	}
+	    	else
+	    		char_count++;
 	    }
-	    // while(content[i])
-	    // getData(content);
-	    // processData(content);
-	    // printf("%s\n",content);
 
 	    close(fd);
 		exit(0);
@@ -106,31 +109,3 @@ int main(){
 	return 0;
 
 }
-
-
-
-// #include<stdio.h> 
-// #include<conio.h> 
-// #include<String.h> 
-// void getData(char *buffer); 
-// int main() 
-// { 
-// 	FILE *fp = fopen("D:\\Test.csv","r"); 
-//     int count=0; 
-// 	do 
-// 	{ 
-// 	 char buffer[1024]; 
-// 	 fgets(buffer, 1024, (FILE*)fp); 
-// 	 count++; 
-// 	 if(count != 1) 
-// 	 { 
-// 	  printf(buffer); 
-// 	  getData(buffer); 
-// 	 } 
-// 	 getch(); 
-// 	}while((getc(fp))!=EOF); 
- 
-	 
-// } 
-
-
