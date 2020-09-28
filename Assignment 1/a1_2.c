@@ -1,67 +1,67 @@
-#include <stdio.h>
-#include <unistd.h>
-#include<stdlib.h> 
-#include<sys/wait.h> 
-#include <sys/types.h>
+#include <stdio.h> 
+#include <string.h>
+#include<ctype.h>
+#define MAX_LIMIT 20 
 
-//cat ne ls im
-// Your task is to design your a simple shell that can handle five, internal commands –
- // ‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’. These commands
-// external commands – ‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’.
+// CHECK SPACE =1
 
+struct command{
+    char cmd[MAX_LIMIT];        
+    char arg[MAX_LIMIT];
+    char flag[MAX_LIMIT];
+};
 
 void display(){
-	printf("---Terminal---\n Available commands:\n‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’\n‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’\n" );
+    printf("--- Terminal ---\n Available commands:\n‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’\n‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’\n*All commands end in <space>*\n" );
 
 }
-int main(){
-	display();	
-	printf("Enter command number: \n");
-	int choice,loopf =1;
-	while(loopf){ 
-		scanf("%d",&choice);
-		if(choice>=1 && choice <=10){
-			printf("Command selected!\n");
-		}
-		else
-			printf("Enter valid command number!!\n");
-	}
-	switch(choice){
-		case 1:{
 
-		}
-		case 2:{
-			
-		}
-		case 3:{
-			
-		}
-		case 4:{
-			
-		}
-		case 5:{
-			
-		}
-		case 6:{
-			
-		}
-		case 7:{
-			
-		}
-		case 8:{
-			
-		}
-		case 9:{
-			
-		}
-		case 10:{
-			
-		}
+int main() 
+{   
+    struct command c;
+    int noSpace=1;
+    int active =1;
+    display();
 
-	}
+    // To get input
+    while(active==1){
+        char str[MAX_LIMIT];
+        char str2[MAX_LIMIT];
+        //input code for commands
+        printf("terminal> ");
+        fgets(str, MAX_LIMIT, stdin);
+        strcpy(str2,str);
 
+        //check for spaces
+        for (int i = 0; i < MAX_LIMIT; ++i){
+            char d = str[i];
+            if (isspace(d))
+                noSpace=0;
+        }
+        if(noSpace==1){
+            if(strcmp(str2,"exit")==0 )
+            break;
+        }
+        else{
+            char *token;
+            token = strtok(str," " );
+            strcpy(c.cmd,token);    
+            // printf( "%s\n",cmd);
+            token = strtok(NULL," ");
 
+            strcpy(c.arg,token);
+            // printf( "%s\n",arg);
+            token = strtok(NULL," ");
 
-
-	return 0;
-}
+            while(token!=NULL){ 
+                strcpy(c.flag,token);
+                // printf( "%s\n",flag);
+                token = strtok(NULL," ");
+            }
+        }
+        if(strcmp(c.cmd,"exit")==0 )
+            break;
+    }
+ 
+    return 0; 
+} 
