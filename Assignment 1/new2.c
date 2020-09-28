@@ -2,13 +2,13 @@
 #include <string.h>
 #include<ctype.h>
 #include <unistd.h>
-#define MAX_LIMIT 20 
+#define len 80 
 
 //cd pl 
 struct command{
-    char cmd[MAX_LIMIT];        
-    char arg[MAX_LIMIT];
-    char flag[MAX_LIMIT];
+    char cmd[len];
+    char flag[len];            
+    char arg[len];
 };
 
 void display(){
@@ -31,17 +31,17 @@ int main()
 {   
     struct command c;
     int active =1;
-    char buff[MAX_LIMIT];
+    char buff[len];
 
     display();
 
     // To get input
     while(active==1){
-        char str[MAX_LIMIT];
-        char str2[MAX_LIMIT];
+        char str[len];
+        char str2[len];
         //input code for commands
         printf("terminal> ");
-        fgets(str, MAX_LIMIT, stdin);
+        fgets(str, len, stdin);
         strcpy(str2,str);
 
         char *token;
@@ -69,7 +69,7 @@ int main()
             else if(strcmp(c.flag,"")==0)
             {
                 chdir(c.arg);
-                printf("%s\n", getcwd(buff,MAX_LIMIT)); 
+                printf("%s\n", getcwd(buff,len)); 
             }
         }
 
