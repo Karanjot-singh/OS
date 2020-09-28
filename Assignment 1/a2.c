@@ -1,6 +1,7 @@
 #include <stdio.h> 
 #include <string.h>
 #include<ctype.h>
+#include <unistd.h>
 #define MAX_LIMIT 20 
 
 
@@ -19,6 +20,8 @@ int main()
 {   
     struct command c;
     int active =1;
+    char buff[MAX_LIMIT];
+
     display();
 
     // To get input
@@ -49,9 +52,15 @@ int main()
         //exit
         if(strcmp(c.cmd,"exit")==0 || strcmp(c.cmd,"Exit")==0 )
             break;
-        else if()
-            ;
-
+        else if(strcmp(c.cmd,"cd")==0){
+            if(strcmp(c.arg,"")==0)
+                printf("Valid format cd <directory>\n" );
+            else if(strcmp(c.flag,"")==0)
+            {
+                chdir(c.arg);
+                printf("%s\n", getcwd(buff,MAX_LIMIT)); 
+            }
+        }
 
     }
  

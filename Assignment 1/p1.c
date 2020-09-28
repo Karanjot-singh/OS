@@ -58,7 +58,7 @@ int main(){
 		int fd = open("file.csv", O_RDONLY );
 		if ( fd < 0 ){
        	 return 1;
-       	 printf("Error\n");
+       	 printf("Error\n"); //errno
     	}
 
     	int loop =1;

@@ -23,13 +23,19 @@ void getData(char buffer[]){
    }	   
 }
 void processData(char buffer[]){
-   char *token;
-   char *buff;
+   char *token;    	
+   char temp[100];
+   char trim[100];
    int ct=0;
    	token = strtok(buffer,"\n" );
    while(token!=NULL){ 
  	ct++;
-	printf( "%s\n",token);
+	strcpy(temp,token);
+	// remove trailing commas
+	int i=0;	
+	// printf( "%s\n",trim);
+
+	printf( "%s\n",temp);
     token = strtok(NULL,"\n");
 	// strcat(buff,token); 
 
@@ -54,6 +60,7 @@ int main(){
 	//child process
 		char content[10000];
 		int fd = open("file.csv", O_RDONLY );
+
 		if ( fd < 0 ){
        	 return 1;
        	 printf("Error\n");
@@ -69,7 +76,7 @@ int main(){
 	    // getData(content);
 	    processData(content);
 	    // printf("%s\n",content);
-	    // write(1,stdout,bytes);
+
 	    close(fd);
 		exit(0);
 	}
