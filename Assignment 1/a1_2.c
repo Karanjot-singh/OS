@@ -58,23 +58,28 @@ int main()
             else
                 char_count++;
         }
-        printf("1 %s 2%s 3 %s\n",c.cmd ,c.flag,c.arg );
+        if(count==0)
+        {
+            strcpy(c.cmd,str);
+            strcpy(c.flag," \n");
+            strcpy(c.cmd," \n");
+
+        }
+        printf("1 %s 2 %s 3 %s\n",c.cmd ,c.flag,c.arg );
                //exit
-        if(strcmp(c.cmd,"exit")==0 || strcmp(c.cmd,"Exit")==0 ){
-            printf("exiting...\n");
-            active=0;
+        if(strcmp(c.cmd,"exit\n")==0 || strcmp(c.cmd,"Exit\n")==0 ){
             break;
         }
-        printf("input %d\n",strcmp(c.cmd,"exit") );
-        // else if(strcmp(c.cmd,"cd")==0){
-        //     if(strcmp(c.arg,"")==0)
-        //         printf("Valid format cd <directory>\n" );
-        //     else if(strcmp(c.flag,"")==0)
-        //     {
-        //         chdir(c.arg);
-        //         printf("%s\n", getcwd(buff1,len)); 
-        //     }
-        // }
+        else if(strcmp(c.cmd,"cd\n")==0){
+            printf("cus\n");
+            if(strcmp(c.flag," \n")==0 && strcmp(c.arg," \n")==0)
+                printf("Valid format cd <directory>\n" );
+            else if(strcmp(c.flag,"")==0)
+            {
+                chdir(c.arg);
+                printf("%s\n", getcwd(buff1,len)); 
+            }
+        }
         break;
     }
 
