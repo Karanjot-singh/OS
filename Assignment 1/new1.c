@@ -8,36 +8,35 @@
 
 
 void getData(char buffer[]){
-   char *token;
-   int ct=0;
-   	token = strtok(buffer,", \n" );
+	char *token;
+	int ct=0;
+	token = strtok(buffer,", \n" );
 
-   for (int i = 0; i < 6; ++i)
-   {
-   	 token = strtok(NULL,",");
-   }
-   while(token!=NULL){ 
- 	ct++;
-	printf( "%s\n",token);
-    token = strtok(NULL,",");
-      
-   }	   
+	for (int i = 0; i < 6; ++i)
+	{
+		token = strtok(NULL,",");
+	}
+	while(token!=NULL){ 
+		ct++;
+		printf( "%s\n",token);
+		token = strtok(NULL,",");
+
+	}	   
 }
 void processData(char buffer[]){
-   char *token;    	
-   char temp[100];
-   	token = strtok(buffer,"\n" );
-   while(token!=NULL){ 
-	strcpy(temp,token);
+	char *token;    	
+	char temp[100];
+	token = strtok(buffer,"\n" );
+	while(token!=NULL){ 
+		strcpy(temp,token);
 	// getData(temp);
 
-	printf( "%s\n",temp);
-    token = strtok(NULL,"\n");
+		printf( "%s\n",temp);
+		token = strtok(NULL,"\n");
 	// strcat(buff,token); 
 
-   }
+	}
 	// printf( "%s\n",buff);
-
    // getData(buff);	   
 }
 
@@ -49,7 +48,7 @@ int main(){
 
 	if(pid<0){
 		printf("Error in fork process");
-	return 1;
+		return 1;
 	}
 
 	else if(pid ==0){
@@ -58,45 +57,44 @@ int main(){
 		int fd = open("file.csv", O_RDONLY );
 
 		if ( fd < 0 ){
-       	 return 1;
-       	 printf("Error\n");
-    }
+			return 1;
+			printf("Error\n");
+		}
 
-	    // ssize_t bytes = read (fd,content,sizeof(content)-1);
-	    read (fd,content,sizeof(content)-1);
+		read (fd,content,sizeof(content)-1);
 
-	    content[7000]='\0';
-	    int count =0;
-	    
-    	int prev_index=0;
-    	int char_count=0;
-	    for(int i =0 ; i<7000;i++){
+		content[7000]='\0';
+		int count =0;
+
+		int prev_index=0;
+		int char_count=0;
+		for(int i =0 ; i<7000;i++){
 	    	// printf("%c",content[i] );
 
-	    	if (content[i]=='\n')
-	    	{	
+			if (content[i]=='\n')
+			{	
 	    		// printf("p%d c%d\n",prev_index,char_count );
-			    char buff[100];
-			    strncat(buff,&content[prev_index],char_count);
-			    printf("%s\n",buff);
-			    prev_index+=char_count+1;
-			    char_count=0;
-			    strcpy(buff,"");
+				char buff[100];
+				strncat(buff,&content[prev_index],char_count);
+				printf("%s\n",buff);
+				prev_index+=char_count+1;
+				char_count=0;
+				strcpy(buff,"");
 
-	    	}
-	    	else if(content[i]=='@'){
-	    		char temp[100];
-	    		strncat(temp,&content[prev_index],char_count);
-			    printf("%s\n",temp);
-			    prev_index+=char_count+1;
-			    char_count=0;
-	    		break;
-	    	}
-	    	else
-	    		char_count++;
-	    }
+			}
+			else if(content[i]=='@'){
+				char temp[100];
+				strncat(temp,&content[prev_index],char_count);
+				printf("%s\n",temp);
+				prev_index+=char_count+1;
+				char_count=0;
+				break;
+			}
+			else
+				char_count++;
+		}
 
-	    close(fd);
+		close(fd);
 		exit(0);
 	}
 
