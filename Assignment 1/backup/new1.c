@@ -49,7 +49,6 @@ void getData(char buffer[]){
 }
 
 int main(){
-	int last_sec_a=0;
 	pid_t pid;
 	int status;
 	pid = fork();
@@ -93,7 +92,6 @@ int main(){
 				}
 				prev_index+=char_count+1;
 				char_count=0;
-				last_sec_a=prev_index;
 				strcpy(buff,"");
 
 			}
@@ -111,64 +109,87 @@ int main(){
 
 	else{
 	// parent
-		printf("Parent Process:\n");
+		printf("\nParent Process:\n");
 		pid_t parent_id = waitpid(pid, &status, 0);
-	// 	char content[7000];
-	// 	int fd = open( "file.csv", O_RDONLY );
+		char content[7000];
+		int fd = open( "file.csv", O_RDONLY );
 
-	// 	if (fd < 0){
-	// 		return 1;
-	// 		printf("Error\n");
-	// 	}
+		if (fd < 0){
+			perror("Error ");
+			return -1;
+		}
 
-	// 	read (fd,content,sizeof(content)-1);
+		read (fd,content,sizeof(content)-1);
+		/*Process Data for getData()*/
+		content[7000]='\0';
+		int count =0;
+		int prev_index=0;		
+		int char_count=0;
+		char ch ='\0';
 
-	// 	content[7000]='\0';
-	// 	int count =0;
-	// 	int prev_index=0;
-	// 	int char_count=0;
-	// 	char ch ='\0';
-	// 	for(int i =0 ; i<7000;i++){
-	//     	// printf("%c",content[i] );
+		// Loop 1 to skip through All section A students
+		for(int i =0 ; i<7000;i++){
+			if (content[i]=='\n')
+			{	
+				count++;
+				prev_index+=char_count+1;
+				char_count=0;
+			}
+			else if(content[i]=='B'){
+				//For reading only sec A marks
+				break;
+			}
+			else
+				char_count++;
+		}
 
-	// 		if (content[i]=='\n')
-	// 		{	
-	//     		// printf("p%d c%d\n",prev_index,char_count );
-	// 			count++;
-	// 			char buff[100];
-	// 			strncat(buff,&content[prev_index],char_count);
-	// 			strncat(buff,&ch,1);			
-	// 			if (count>1)
-	// 			{	
-	// 				// printf("%s\n",buff);
-	// 				// getData(buff);
-	// 			}
-	// 			printf("%s\n",buff);
-	// 			prev_index+=char_count+1;
-	// 			char_count=0;
-	// 			strcpy(buff,"");
+		char secB[4000];
+		strncat(secB,&content[prev_index],7000-prev_index);
+		printf("\n");
+		count =0;
+		prev_index=0;		
+		char_count=0;
+		// Slightly modified version of child process function
+		for(int i =0 ; i<4000;i++){
+	    	// printf("%c",secB[i] );
 
-	// 		}
-	// 		else if(content[i]=='A' && count>1){
-	// 			//For reading only sec B marks
-	// 			continue;
-	// 		}
-	// 		else if(content[i]=='@'){
-	// 			char temp[100];
-	// 			strncat(temp,&content[prev_index],char_count);
-	// 			strncat(temp,&ch,1);
-	// 			printf("%s\n",temp);
-	// 			// getData(temp);
-	// 			prev_index+=char_count+1;
-	// 			char_count=0;
-	// 			break;
-	// 		}
-	// 		else
-	// 			char_count++;
-	// 	}
+			if (secB[i]=='\n')
+			{	
+				count++;
+				char buff2[100];
+				strncat(buff2,&secB[prev_index],char_count);
+				strncat(buff2,&ch,1);			
+				if (count>1)
+				{	
+					// printf("%s\n",buff2);
+					getData(buff2);
+				}
+				prev_index+=char_count+1;
+				char_count=0;
+				strcpy(buff2,"");
 
-	// 	close(fd);
+			}
+			else if (secB[i]=='@')
+			{	
+				count++;
+				char buff3[100];
+				strncat(buff3,&secB[prev_index],char_count);
+				strncat(buff3,&ch,1);			
+				if (count>1)
+				{	
+					// printf("%s\n",buff3);
+					getData(buff3);
+				}
+				prev_index+=char_count+1;
+				char_count=0;
+				strcpy(buff3,"");
 
+			}
+			else
+				char_count++;
+		}	
+
+		close(fd);
 	}
 	return 0;
 
