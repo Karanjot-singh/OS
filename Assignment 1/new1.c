@@ -5,16 +5,47 @@
 #include<sys/wait.h> 
 #include <sys/types.h>
 #include<string.h>
+#include <stdlib.h>
 
 
 void getData(char buffer[]){
 	char *token;
 	token = strtok(buffer,"," );
-	while(token!=NULL){ 
-		printf( "%s\n",token);
-		token = strtok(NULL,",");
+	float marks=0;
+	int iteration=0;
+	while(token!=NULL){
+		iteration++;
+		if(iteration==1)
+		{	
+			printf("Student ID: %s | ",token);
+			marks=0;
+		}
+		else if(iteration==2)
+		{
+			printf("Section: %s | ",token);			
+			marks=0;
+		}
+		else if(iteration==3)
+		{
+			marks+= atof(token);
 
-	}	   
+		}
+		else if(iteration==4)
+		{
+			marks+= atof(token);
+		}
+		else if(iteration==5)
+		{
+			marks+= atof(token);
+		}
+		else if(iteration==6)
+		{
+			marks+= atof(token);
+		}
+		token = strtok(NULL,",");
+	}
+	marks=marks/4;
+	printf( "Average Marks:- %.2f \n",marks);	   
 }
 
 int main(){
@@ -38,7 +69,7 @@ int main(){
 		}
 
 		read (fd,content,sizeof(content)-1);
-
+		/*Process Data for getData()*/
 		content[7000]='\0';
 		int count =0;
 		int prev_index=0;
@@ -49,7 +80,6 @@ int main(){
 
 			if (content[i]=='\n')
 			{	
-	    		// printf("p%d c%d\n",prev_index,char_count );
 				count++;
 				char buff[100];
 				strncat(buff,&content[prev_index],char_count);
@@ -64,14 +94,8 @@ int main(){
 				strcpy(buff,"");
 
 			}
-			else if(content[i]=='@'){
-				char temp[100];
-				strncat(temp,&content[prev_index],char_count);
-				strncat(temp,&ch,1);
-				// printf("%s\n",temp);
-				getData(temp);
-				prev_index+=char_count+1;
-				char_count=0;
+			else if(content[i]=='B'){
+				//For reading only sec A marks
 				break;
 			}
 			else
@@ -119,6 +143,10 @@ int main(){
 		// 		char_count=0;
 		// 		strcpy(buff,"");
 
+		// 	}
+		// else if(content[i]=='A' && count>1){
+		// 		//For reading only sec B marks
+		// 		break;
 		// 	}
 		// 	else if(content[i]=='@'){
 		// 		char temp[100];
