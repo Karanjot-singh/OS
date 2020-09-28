@@ -2,31 +2,43 @@
 #include <string.h>
 #define MAX_LIMIT 20 
 
-//input code for commands
-int main() 
-{ 
-    char str[MAX_LIMIT];
-    char cmd[MAX_LIMIT];
+
+struct command{
+    char cmd[MAX_LIMIT];        
     char arg[MAX_LIMIT];
     char flag[MAX_LIMIT];
+};
 
-    fgets(str, MAX_LIMIT, stdin);
-    printf("%s", str);
-    char *token;
-    int ct=0;
-    token = strtok(str," " );
-    strcpy(cmd,token);    
-    printf( "%s\n",token);
-    token = strtok(NULL," ");
+void display(){
+    printf("--- Terminal ---\n Available commands:\n‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’\n‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’\n" );
 
-    strcpy(arg,token);
-    printf( "%s\n",token);
-    token = strtok(NULL," ");
+}
 
-    while(token!=NULL){ 
-    strcpy(flag,token);
-    printf( "%s\n",token);
-    token = strtok(NULL," ");
+int main() 
+{   
+    struct command c;
+    display();
+    while(strcmp(c.cmd,"exit")!=0){
+        char str[MAX_LIMIT];
+        //input code for commands
+        printf("terminal> ");
+        fgets(str, MAX_LIMIT, stdin);
+
+        char *token;
+        token = strtok(str," " );
+        strcpy(c.cmd,token);    
+        // printf( "%s\n",cmd);
+        token = strtok(NULL," ");
+
+        strcpy(c.arg,token);
+        // printf( "%s\n",arg);
+        token = strtok(NULL," ");
+
+        while(token!=NULL){ 
+        strcpy(c.flag,token);
+        // printf( "%s\n",flag);
+        token = strtok(NULL," ");
+        }
     }
  
     return 0; 
