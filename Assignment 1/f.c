@@ -6,10 +6,11 @@
 #include <sys/types.h>
 #include<string.h>
 
+
 void getData(char buffer[]){
    char *token;
    int ct=0;
-   	token = strtok(buffer,"," );
+   	token = strtok(buffer,", \n" );
 
    for (int i = 0; i < 6; ++i)
    {
@@ -25,15 +26,10 @@ void getData(char buffer[]){
 void processData(char buffer[]){
    char *token;    	
    char temp[100];
-   char trim[100];
-   int ct=0;
    	token = strtok(buffer,"\n" );
    while(token!=NULL){ 
- 	ct++;
 	strcpy(temp,token);
-	// remove trailing commas
-	int i=0;	
-	// printf( "%s\n",trim);
+	// getData(temp);
 
 	printf( "%s\n",temp);
     token = strtok(NULL,"\n");
@@ -58,7 +54,7 @@ int main(){
 
 	else if(pid ==0){
 	//child process
-		char content[10000];
+		char content[7000];
 		int fd = open("file.csv", O_RDONLY );
 
 		if ( fd < 0 ){
@@ -69,12 +65,32 @@ int main(){
 	    // ssize_t bytes = read (fd,content,sizeof(content)-1);
 	    read (fd,content,sizeof(content)-1);
 
-	    content[10000]='\0';
-	    // for(int i =0 ; i<10000;i++){
-	    // 	printf("%c\n",content[i] );
-	    // }
+	    content[7000]='\0';
+	    char buff[100];
+	    int count =0;
+	    for(int i =0 ; i<7000;i++){
+	    	// printf("%c",content[i] );
+
+	    	// while(content[i]=='\n'){
+	    	// 	char buff[100];
+	    	// 	buff[i]=content[i];
+
+	    	// }
+	    	if (content[i]=='\n')
+	    	{	count++;
+	    		if(count==2){
+
+	    		}
+	    		printf("%s\n",buff );
+	    		strcpy(buff,"");
+	    	}
+	    	else{
+	    		buff[i]=content[i];
+	    	}
+	    }
+	    // while(content[i])
 	    // getData(content);
-	    processData(content);
+	    // processData(content);
 	    // printf("%s\n",content);
 
 	    close(fd);
