@@ -1,16 +1,12 @@
+#ifndef _echo
+#define _echo
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
 #define len 80
-#ifndef cm
-struct command
-{
-    char cmd[len];
-    char flag[len];
-    char arg[len];
-};
 #endif
 
 void echo(char *input)
@@ -40,3 +36,4 @@ void echoe(char *input)
             printf("%c", input[i]);
     }
 }
+
