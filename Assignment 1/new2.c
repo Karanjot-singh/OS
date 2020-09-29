@@ -15,6 +15,16 @@ void display(){
     printf("--- Terminal ---\n Available commands:\n‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’\n‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’\n*All commands end in <space>*\n" );
 
 }
+/*
+
+        printf("o/p%s\n", c.cmd);
+        printf("o/p%s\n", c.flag);
+        printf("o/p%s\n", c.arg);
+            printf("cmd %d\n",strcmp(c.cmd,"check"));
+            printf("cmd %d\n",strcmp(c.cmd,"check\n"));
+            printf("empty %d\n",strcmp(c.flag,"-n"));
+            printf("n %d\n",strcmp(c.arg,"me"));
+*/
 
 /*
 cd l p 
