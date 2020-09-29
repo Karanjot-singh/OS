@@ -41,7 +41,7 @@ int main()
         char str2[len];
         //input code for commands
         printf("terminal> ");
-        fgets(str, len, stdin);
+        fgets(str,len, stdin);
         strcpy(str2,str);
 
         char *token;
