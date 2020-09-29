@@ -3,15 +3,21 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
-#include "command.c"
+// #include "cm.c"
 #include "echo.c"
-
 #define len 80
+#ifndef cm
+struct command
+{
+    char cmd[len];
+    char flag[len];
+    char arg[len];
+};
+#endif
 
-void display();
 void echoe(char *input);
 void echo(char *input);
-
+void display();
 void trim_n(char *input)
 {
     size_t size = strlen(input);

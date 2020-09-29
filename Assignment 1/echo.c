@@ -3,8 +3,15 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
-#include "command.c"
 #define len 80
+#ifndef cm
+struct command
+{
+    char cmd[len];
+    char flag[len];
+    char arg[len];
+};
+#endif
 
 void echo(char *input)
 {
