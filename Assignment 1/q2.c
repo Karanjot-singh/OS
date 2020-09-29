@@ -3,7 +3,16 @@
 #include<ctype.h>
 #include <unistd.h>
 #define len 80 
+/*
+cd l p 
+echo Options:
+      -n    do not append a newline
+      -e    enable interpretation of the following backslash escapes
+history -c , -d [offet], -w
 
+
+
+*/
 struct command{
     char cmd[len];        
     char arg[len];
