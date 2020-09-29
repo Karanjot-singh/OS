@@ -13,12 +13,37 @@
 void echoe(char *input);
 void echo(char *input);
 void display();
+void trim_n(char *input);
 
-void trim_n(char *input)
+int call_process(char *file, char *input)
 {
-    size_t size = strlen(input);
-    if ((input[size - 1] == '\n') && (size > 0))
-        input[size - 1] = '\0';
+    pid_t pid;
+    int status;
+    pid = fork();
+
+    if (pid < 0)
+    {
+        perror("Error ");
+        return -1;
+    }
+
+    else if (pid == 0)
+    {
+        //child process
+        if (execvp(file, input) < 0)
+        {
+            printf("*** ERROR: exec failed\n");
+            exit(1);
+        }
+        exit(0);
+    }
+    else
+    {
+        //parent process
+        pid_t parent_id = waitpid(pid, &status, 0);
+    }
+
+    return 0;
 }
 
 int main()
@@ -127,6 +152,32 @@ int main()
                 printf("%s\n", getcwd(buff, len));
             }
         }
+        else if (strcmp(c.cmd, "ls") == 0)
+        {
+            char *file = "ls";
+            char *input[3];
+            input[0] = c.cmd;
+            input[1] = c.flag;
+            input[2] = c.arg;
+            call_process(file,input);
+        }
+        else if (strcmp(c.cmd, "cat") == 0)
+        {
+        }
+        else if (strcmp(c.cmd, "date") == 0)
+        {
+        }
+        else if (strcmp(c.cmd, "rm") == 0)
+        {
+        }
+        else if (strcmp(c.cmd, "mkdir") == 0)
+        {
+        }
+        else
+        {
+            printf("Enter valid commmand!\n");
+        }
     }
+
     return 0;
 }
