@@ -125,8 +125,11 @@ int main()
             {
                 echoe(c.arg);
             }
-            else
-                perror("Error: ");
+            else{
+
+                perror("Invalid input/n try --help ");
+                continue;
+            }
         }
         else if (strcmp(c.cmd, "history") == 0)
         {
@@ -142,7 +145,7 @@ int main()
             //
             else if (strcmp(c.flag, "-w") == 0)
             {
-                FILE *fp = fopen("files/history.txt", "w");
+                FILE *fp = fopen("/home/karan/Desktop/sem/OS/Assignment 1/files/history.txt", "w");
                 if (fp == NULL){
                     perror("Error ");
                     continue;
@@ -157,8 +160,10 @@ int main()
         {
             //cd implementation
 
-            if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0)
+            if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0){
                 perror("Error ");
+                continue;
+            }
 
             else if (strcmp(c.flag, "") == 0)
             { //default cd
