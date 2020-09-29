@@ -3,35 +3,15 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
-// #include "c.c"
+#include "command.c"
+#include "echo.c"
+
 #define len 80
-/*
-cd l p 
-echo Options:
-      -n    do not append a newline
-      -e    enable interpretation of the following backslash escapes
-history -c , -w
 
-date -R, -u
-ls -a ls-h
-rm -i -d
+void display();
+void echoe(char *input);
+void echo(char *input);
 
-*/
-struct command
-{
-    char cmd[len];
-    char flag[len];
-    char arg[len];
-};
-
-
-void display()
-{
-    printf("> Terminal\n Available commands:\n");
-    printf("‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’\n");
-    printf("‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’\n");
-    printf("Format: [cmd] [flag] [args]\n");
-}
 void trim_n(char *input)
 {
     size_t size = strlen(input);
@@ -39,38 +19,9 @@ void trim_n(char *input)
         input[size - 1] = '\0';
 }
 
-void echo(char *input)
-{
-    for (int i = 0; i < strlen(input); ++i)
-    {
-        if (input[i] == '\\' && input[i + 1] == '\\')
-            printf("\\");
-        else if (input[i] == '\\')
-            continue;
-        else
-            printf("%c", input[i]);
-    }
-}
-void echoe(char *input)
-{
-    // Implemented 3 escape sequences \t, \n ...
-    for (int i = 0; i < strlen(input); ++i)
-    {
-        if (input[i] == '\\' && input[i + 1] == '\t')
-            printf("    ");
-        else if (input[i] == '\\' && input[i + 1] == '\n')
-            printf("\n");
-        else if (input[i] == '\\')
-            continue;
-        else
-            printf("%c", input[i]);
-    }
-}
-
 int main()
 {
     int active = 1;
-    char buff[len];
     char history[10 * len] = "";
     display();
 
@@ -127,7 +78,8 @@ int main()
             {
                 echoe(c.arg);
             }
-            else{
+            else
+            {
                 perror("Invalid input/n try --help ");
                 continue;
             }
@@ -136,7 +88,7 @@ int main()
         else if (strcmp(c.cmd, "history") == 0)
         {
             if (strcmp(c.flag, "") == 0)
-            { 
+            {
                 printf("%s/n", history);
             }
             //
@@ -148,10 +100,11 @@ int main()
             else if (strcmp(c.flag, "-w") == 0)
             {
                 FILE *fp = fopen("/home/karan/Desktop/sem/OS/Assignment 1/files/history.txt", "w");
-                if (fp == NULL){
+                if (fp == NULL)
+                {
                     perror("Error ");
                     continue;
-                    }
+                }
                 fprintf(fp, "%s\n", history);
                 fclose(fp);
             }
@@ -159,14 +112,16 @@ int main()
 
         //<cd>
         else if (strcmp(c.cmd, "cd") == 0)
-        {   //cd implementation
-            if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0){
+        { //cd implementation
+            if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0)
+            {
                 perror("Error ");
                 continue;
             }
             else if (strcmp(c.flag, "") == 0)
             { //default cd
                 chdir(c.arg);
+                char buff[len];
                 printf("%s\n", getcwd(buff, len));
             }
         }
