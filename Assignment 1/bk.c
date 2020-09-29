@@ -17,12 +17,12 @@ ls -a ls-h
 rm -i -d
 
 */
-// struct command
-// {
-//     char cmd[len];
-//     char flag[len];
-//     char arg[len];
-// };
+struct command
+{
+    char cmd[len];
+    char flag[len];
+    char arg[len];
+};
 
 void cmd_cd(struct command *c);
 
@@ -134,7 +134,6 @@ int main()
                 continue;
             }
         }
-        // <history>
         else if (strcmp(c.cmd, "history") == 0)
         {
             if (strcmp(c.flag, "") == 0)
@@ -162,11 +161,18 @@ int main()
         //<cd>
         else if (strcmp(c.cmd, "cd") == 0)
         {
+            //cd implementation
+
             if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0){
                 perror("Error ");
                 continue;
             }
-            cmd_cd(&c);
+
+            // else if (strcmp(c.flag, "") == 0)
+            // { //default cd
+            //     chdir(c.arg);
+            //     printf("%s\n", getcwd(buff, len));
+            // }
         }
     }
     return 0;
