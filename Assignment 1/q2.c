@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
-#include "cd.c"
+// #include "c.c"
 #define len 80
 /*
 cd l p 
@@ -17,14 +17,13 @@ ls -a ls-h
 rm -i -d
 
 */
-// struct command
-// {
-//     char cmd[len];
-//     char flag[len];
-//     char arg[len];
-// };
+struct command
+{
+    char cmd[len];
+    char flag[len];
+    char arg[len];
+};
 
-void cmd_cd(struct command *c);
 
 void display()
 {
@@ -129,7 +128,6 @@ int main()
                 echoe(c.arg);
             }
             else{
-
                 perror("Invalid input/n try --help ");
                 continue;
             }
@@ -161,12 +159,16 @@ int main()
 
         //<cd>
         else if (strcmp(c.cmd, "cd") == 0)
-        {
+        {   //cd implementation
             if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0){
                 perror("Error ");
                 continue;
             }
-            cmd_cd(&c);
+            else if (strcmp(c.flag, "") == 0)
+            { //default cd
+                chdir(c.arg);
+                printf("%s\n", getcwd(buff, len));
+            }
         }
     }
     return 0;
