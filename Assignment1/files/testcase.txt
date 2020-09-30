@@ -1,0 +1,10 @@
+/home/karan/Desktop/sem/OS/Assignment1 $ mkdir  p
+/home/karan/Desktop/sem/OS/Assignment1 $ mkdir -m po
+Enter file mode 
+0777
+mkdir: created directory 'po'
+ /home/karan/Desktop/sem/OS/Assignment1 $ 
+ 
+ /home/karan/Desktop/sem/OS/Assignment1 $ rm -i f.txt
+rm: remove regular empty file 'f.txt' y/n ?y
+/home/karan/Desktop/sem/OS/Assignment1 $ rm -d p

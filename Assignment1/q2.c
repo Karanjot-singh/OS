@@ -185,6 +185,14 @@ int main()
         }
         else if (strcmp(c.cmd, "rm") == 0)
         {
+            char *file = "/home/karan/Desktop/sem/OS/Assignment1/rm";
+            char *input[4]; //goes to argv
+            input[0] = "rm";
+            input[1] = c.flag;
+            input[2] = c.arg;
+            input[3] = NULL;
+
+            call_process(file, input);
         }
         else if (strcmp(c.cmd, "mkdir") == 0)
         {

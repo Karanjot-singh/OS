@@ -15,3 +15,5 @@ In the child process, we want to run the command given by the user. So, we use o
 
 
 Try to guard your header files with #ifndef 
+
+cat n E
