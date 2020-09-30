@@ -28,25 +28,24 @@ int main(int argc, char *argv[])
             perror("Error ");
         else
         {
-            printf("mkdir: created directory '%s\n' ",name);
+            printf("mkdir: created directory '%s'\n",name);
         }
         
     }
     else if (strcmp(argv[1], "-m") == 0)
     {   printf("Enter file mode \n");
         int mod;
-        scanf("%d",mod);
+        scanf("%d",&mod);
         if (mkdir(name, mod) != 0)
             perror("Error ");
         else
         {
-            printf("mkdir: created directory '%s' ",name);
+            printf("mkdir: created directory '%s'\n ",name);
         }
         
     }
     else
     {
     }
-    printf("\n");
     return 0;
 }
