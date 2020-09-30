@@ -141,6 +141,26 @@ int main()
                 fclose(fp);
             }
         }
+        else if (strcmp(c.cmd, "pwd") == 0)
+        {
+            if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0)
+            {
+                char buffi[len];
+                printf("%s \n", getcwd(buffi, len));
+            }
+            else if (strcmp(c.flag, "") == 0)
+            {
+                char buffi[len];
+                printf("%s \n", getcwd(buffi, len));
+            }
+            else if (strcmp(c.flag, "--help") == 0)
+            {
+                printf("\nhelp\n");
+            }
+            else
+            {
+            }
+        }
 
         //<cd>
         else if (strcmp(c.cmd, "cd") == 0)
@@ -211,6 +231,25 @@ int main()
             input[3] = NULL;
 
             call_process(file, input);
+        }
+        else if (strcmp(c.cmd, "--help") == 0)
+        {   
+            char *filepath="/home/karan/Desktop/sem/OS/Assignment1/files/readme.txt";
+            FILE *fp;
+            char read_line[3*len];
+            fp = fopen(filepath, "r");
+            if (fp >= 0)
+            {
+
+                while (fscanf(fp, "%[^\n]\n", read_line) != EOF)
+                    printf("%s\n\n", read_line);
+            }
+            else
+            {
+                perror("Error \n");
+            }
+
+            fclose(fp);
         }
         else
         {

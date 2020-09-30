@@ -109,8 +109,8 @@ int main(){
 
 	else{
 	// parent
-		printf("\nParent Process- Pid: %d \n",getpid());
 		pid_t parent_id = waitpid(pid, &status, 0);
+		printf("\nParent Process- Pid: %d \n",getpid());
 		char content[7000];
 		int fd = open( "file.csv", O_RDONLY );
 
