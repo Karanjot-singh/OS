@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
-#include<sys/wait.h> 
+#include <sys/wait.h>
 #include <sys/types.h>
 #include "cm.c"
 #include "echo.c"
@@ -19,13 +19,14 @@ void trim_n(char *input);
 int active = 1;
 
 int call_process(char *file, char **input)
-{   
+{
     pid_t pid;
     int status;
     pid = fork();
 
     if (pid < 0)
-    {   printf("f");
+    {
+        printf("f");
         perror("Error ");
         return -1;
     }
@@ -48,13 +49,6 @@ int call_process(char *file, char **input)
 
     return 0;
 }
-void prevent_error(int n){
-    //outside proccess return exit code to continue while loop
-    if (n<0)
-    active==2;
-
-}
-
 int main()
 {
 
@@ -65,6 +59,8 @@ int main()
     {
         char command_temp[len][len];
         char str[3 * len];
+        char buff[len];
+        printf("%s ", getcwd(buff, len));
         printf("$ ");
         fgets(str, 3 * len, stdin);
         strcat(history, str);
@@ -116,7 +112,7 @@ int main()
             }
             else
             {
-                perror("Invalid input/n try --help ");
+                perror("Invalid input\n try --help ");
                 continue;
             }
         }
@@ -125,7 +121,7 @@ int main()
         {
             if (strcmp(c.flag, "") == 0)
             {
-                printf("%s/n", history);
+                printf("%s\n", history);
             }
             //
             else if (strcmp(c.flag, "-c") == 0)
@@ -135,7 +131,7 @@ int main()
             //
             else if (strcmp(c.flag, "-w") == 0)
             {
-                FILE *fp = fopen("/home/karan/Desktop/sem/OS/Assignment 1/files/history.txt", "w");
+                FILE *fp = fopen("/home/karan/Desktop/sem/OS/Assignment1/files/history.txt", "w");
                 if (fp == NULL)
                 {
                     perror("Error ");
@@ -151,14 +147,16 @@ int main()
         { //cd implementation
             if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0)
             {
+                printf("cd error");
                 perror("Error ");
                 continue;
             }
             else if (strcmp(c.flag, "") == 0)
             { //default cd
-                chdir(c.arg);
-                char buff[len];
-                printf("%s\n", getcwd(buff, len));
+                if (chdir(c.arg) != 0){
+                    perror("cd failed ");
+                    continue;
+                }
             }
         }
         else if (strcmp(c.cmd, "ls") == 0)
@@ -168,8 +166,8 @@ int main()
             argv[0] = c.cmd;
             argv[1] = c.flag;
             argv[2] = c.arg;
-            argv[3]=NULL;
-            call_process(file,argv);
+            argv[3] = NULL;
+            call_process(file, argv);
         }
         else if (strcmp(c.cmd, "cat") == 0)
         {
