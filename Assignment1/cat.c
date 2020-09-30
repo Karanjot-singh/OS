@@ -1,57 +1,50 @@
 #ifndef _cat
 #define _cat
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <dirent.h>
 #define len 80
 #endif
 
-void cmd_cat(char* path)
-{
-    FILE *fp = fopen(path, "r");
-    if (fp == NULL)
-    {
-        perror("Error ");
-    }
-    while(! feof(fp)){
-        char read= fgetc(fp);
-        printf("%c",read);
-    }
-    fclose(fp);
-    return;
-}
-
 int main(int argc, char *argv[])
 {
-    char current_path[len*3];
-    getcwd(current_path, len*3);
+    char current_path[len * 3];
+    getcwd(current_path, len * 3);
+    char ch = '/';
+    if (strcmp(argv[1], "") == 0)
+    {
+        // printf("normal/n");
+        char filepath[len * 3] = "";
+        strcpy(filepath, current_path);
+        strncat(filepath, &ch, 1);
+        strcat(filepath, argv[2]);
+        FILE *fp;
+        char read_line[len];
+        fp = fopen(filepath, "r");
+        if (fp >= 0)
+        {
 
-    if (argc == 1)
-    {
-        // numbe rof args supplied
-        printf("so");
-    }
-    else
-    {
-        if (strcmp(argv[1], "") == 0)
-        {
-            // printf("normal/n");
-            char filepath[len*3];
-            strcpy(filepath,current_path);
-            strcat(filepath,argv[2]);
-            printf("\n%s",filepath);
-            cmd_cat(filepath);
-        }
-        else if (strcmp(argv[1], "-l") == 0)
-        {
+            while (fscanf(fp, "%[^\n]\n", read_line) != EOF)
+                printf("%s\n", read_line);
         }
         else
         {
+            perror("Error \n");
         }
+        
+        fclose(fp);
     }
-    printf("\n");
+    else if (strcmp(argv[1], "-l") == 0)
+    {
+    }
+    else
+    {
+    }
+
     return 0;
 }
