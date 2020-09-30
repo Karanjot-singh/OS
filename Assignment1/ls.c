@@ -9,42 +9,16 @@
 #define len 80
 #endif
 
-// static int myCompare(const void* a, const void* b) 
-// { 
-  
-//     // setting up rules for comparison 
-//     return strcmp(*(const char**)a, *(const char**)b); 
-// } 
-  
-// // Function to sort the array 
-// void sort(const char* arr[], int n) 
-// { 
-//     // calling qsort function to sort the array 
-//     // with the help of Comparator 
-//     qsort(arr, n, sizeof(const char*), myCompare); 
-// } 
-  
-// int main() 
-// { 
-  
-//     // Get the array of names to be sorted 
-//     const char* arr[] 
-//         = { "geeksforgeeks", "geeksquiz", "clanguage" }; 
-  
-//     int n = sizeof(arr) / sizeof(arr[0]); 
-//     int i; 
-  
-//     // Print the given names 
-//     printf("Given array is\n"); 
-//     for (i = 0; i < n; i++) 
-//         printf("%d: %s \n", i, arr[i]); 
-  
-//     // Sort the given names 
-//     sort(arr, n); 
+static int comp_string(const void *str1, const void *str2)
+{
+    return strcmp(*(const char **)str1, *(const char **)str2);
+}
 void cmd_ls(char *path, int fl)
 {
     DIR *directory;
     struct dirent *files;
+    char **sort_arr;
+    int i = 0;
     //current directory == .
     directory = opendir(path);
     // printf("in ls func\n");
@@ -53,21 +27,43 @@ void cmd_ls(char *path, int fl)
         printf("dir null");
         perror("Error");
     }
-    while (files = readdir(directory))
+    if (fl == 1) // ls -a
     {
-        if (fl == 1) // ls -a
+        while (files = readdir(directory))
+        {
             printf("%s\n", files->d_name);
-        else if (fl == 0) // ls -U
+        }
+    }
+    else if (fl == 0) // ls -U
+    {
+        while (files = readdir(directory))
         {
             char *fname = files->d_name;
-            if (strcmp(fname, ".")==0 || strcmp(fname, "..")==0)
+            if (strcmp(fname, ".") == 0 || strcmp(fname, "..") == 0)
             {
-                continue;
             }
             else
                 printf("%s\n", files->d_name);
         }
     }
+    else if (fl == 2) // ls
+    {   
+        printf("hello\n");
+        while (files = readdir(directory))
+        {
+            char *fname = files->d_name;
+            if (strcmp(fname, ".") == 0 || strcmp(fname, "..") == 0)
+            {
+            }
+            else
+            {
+                // strcpy(sort_arr[i],fname);
+                printf("%s",sort_arr[i]);
+                i++;
+            }
+        }
+    }
+
     closedir(directory);
 }
 
@@ -95,7 +91,7 @@ int main(int argc, char *argv[])
         }
         else if (strcmp(argv[1], "") == 0)
         {
-            cmd_ls(current_path, 0);
+            cmd_ls(current_path, 1);
         }
         else
         {
