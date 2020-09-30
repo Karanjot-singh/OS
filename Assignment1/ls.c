@@ -71,32 +71,22 @@ int main(int argc, char *argv[])
 {
     char current_path[2 * len];
     getcwd(current_path, 2 * len);
-    // printf("dir: %s",current_path);
-    if (argc == 1)
+    if (strcmp(argv[1], "-U") == 0)
     {
-        // numbe rof args supplied
-        printf("this");
+        // printf("normal\n");
+        cmd_ls(current_path, 1);
+    }
+    else if (strcmp(argv[1], "-A") == 0)
+    {
+        cmd_ls(current_path, 0);
+    }
+    else if (strcmp(argv[1], "") == 0)
+    {
         cmd_ls(current_path, 0);
     }
     else
     {
-        if (strcmp(argv[1], "-U") == 0)
-        {
-            // printf("normal\n");
-            cmd_ls(current_path, 0);
-        }
-        else if (strcmp(argv[1], "-a") == 0)
-        {
-            cmd_ls(current_path, 1);
-        }
-        else if (strcmp(argv[1], "") == 0)
-        {
-            cmd_ls(current_path, 1);
-        }
-        else
-        {
-            printf("Enter valid commmand!\n Try command --help\n");
-        }
+        printf("Enter valid commmand!\n Try command --help\n");
     }
     return 0;
 }
