@@ -36,7 +36,7 @@ int call_process(char *file, char **input)
         //child process
         if (execvp(file, input) < 0)
         {
-            printf("*** ERROR: exec failed\n");
+            perror("Exec failed\n");
             exit(1);
         }
         exit(0);

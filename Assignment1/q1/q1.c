@@ -60,7 +60,7 @@ int main(){
 
 	else if(pid ==0){
 	//child process
-		printf("Child Process:\n");
+		printf("Child Process- Pid: %d \n",getpid());
 		char content[7000];
 		int fd = open( "file.csv", O_RDONLY );
 
@@ -109,7 +109,7 @@ int main(){
 
 	else{
 	// parent
-		printf("\nParent Process:\n");
+		printf("\nParent Process- Pid: %d \n",getpid());
 		pid_t parent_id = waitpid(pid, &status, 0);
 		char content[7000];
 		int fd = open( "file.csv", O_RDONLY );

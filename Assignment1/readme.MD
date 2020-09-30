@@ -1,31 +1,94 @@
-When you run history -c you clear the complete history list in memory, but again this does not affect the history file on the disk.
+--------------------------------
+Basic shell Implementation in C:
+--------------------------------
+Karanjot Singh
+2019050
 
-Running history -w writes your current history list in memory to the history file on disk. It does not append new entries but overwrites the complete file.
+-Makefile instructions-
 
-https://askubuntu.com/questions/832335/whats-the-difference-between-history-w-and-the-action-of-closing-a-shell-ses
+	$ make - To run the shell program
+	$ make clean - To delete the object files
 
-Available commands:
-‘cd’, ‘echo’, ‘history’, 
+-System Calls Used-
 
-‘pwd’ and ‘exit’
-‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’
+	fork() :	fork() creates a new process by duplicating the calling process.
+				<unistd.h> , <sys/types.h>
 
-execvp
-In the child process, we want to run the command given by the user. So, we use one of the many variants of the exec system call, execvp. The different variants of exec do slightly different things. Some take a variable number of string arguments. Others take a list of strings. Still others let you specify the environment that the process runs with. This particular variant expects a program name and an array (also called a vector, hence the ‘v’) of string arguments (the first one has to be the program name). The ‘p’ means that instead of providing the full file path of the program to run, we’re going to give its name, and let the operating system search for the program in the path.
+	execvp() :	duplicate the actions of the shell in searching for an executable file
+				<unistd.h>
+
+	waitpid() : The wait() function shall suspend execution of the calling thread until status information for one of the terminated child processes of the calling process is available
+				<sys/wait.h>
+
+-Shell Input-
+	Format: [cmd] [flag] [args]
+	
+	*In case there are no flags, separate command and argument with two consecutive spaces*
 
 
-Try to guard your header files with #ifndef 
 
-cat n E
+-Shell Commands-
+	
+	The following commands (and additional flags) were implemented:
 
-Today is Saturday
-The month is February
-Today is 20 day of February
-Today is 51 day of 2016
-Today is 7 week of 2016
-The time is 20:22:49
-The date is 02/20/16
-The timezone is CET
+	‘echo’		Write arguments to the standard output. 
+				flags 	-n do not append a newline
+						-e enable interpretation of \a ,\n , \\ etc.
 
-%A
-%a   %Z
+	‘history'	Display or manipulate the history list.
+				flags 	-c clear history of current session
+						-w writes current history to the history file in files/ history.txt
+
+	'exit’		Exit the Shell
+
+	‘mkdir’		 Create the DIRECTORY(ies), if they do not already exist.
+
+				flags 	-v print a message for each created directory
+						-m set file mode (as in chmod)
+				Implemented by mkdir()
+
+	‘ls'		List information about the FILEs 
+				flags 	-A do not list implied . and .. 
+						-U do not sort
+				Implemented by opendir() , closedir() functions in <dirent.h>
+
+	'rm’		Remove (unlink) the FILE(s).
+				flags 	-i prompt before every removal
+						-d remove empty directories
+				Implemented by opendir() , closedir() functions in <dirent.h>
+						
+	'cat’		Concatenate FILE(s) to standard output.
+				flags 	-n number all output lines
+						-E display $ at end of each line
+
+	‘date’		Display the current time in the given FORMAT
+				flags 	-u print Coordinated Universal Time (UTC)
+						-R output date and time in RFC 5322 format.
+				Implemented by functions in <time.h>
+
+	'pwd’		Print the name of the current working directory.
+				flags 	-L  print the value of $PWD if it names the current working directory
+						--help
+	‘cd’
+				flags 	-P use the physical directory structure without following symbolic links:
+						-e if current working directory cannot be determined successfully, exit with a non-zero status
+				Implemented by opendir() , closedir() functions in <dirent.h>
+
+
+
+-Corner Cases- 
+	Errors if any, during  fork(), execvp() system calls are returned with prompt by perror() without terminating the program
+	Errors if any, during  shell commands are returned with prompt by perror() without terminating the program. Eg: no such directory
+	Errors if any, during read/write returned with prompt by perror() without terminating the program
+	Invalid commands don't break the program
+	Invalid Flags prompt the user to see --help
+
+-Assumptions-
+	Only single Arguments are passed in all functions
+	user has administrator/root access
+
+-Test Cases-
+	Included in files/Testcase.txt
+
+
+Implemented as Assignment 1 in CSE- Operating Systems course
