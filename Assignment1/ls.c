@@ -47,7 +47,7 @@ void cmd_ls(char *path, int fl)
         }
     }
     else if (fl == 2) // ls
-    {   
+    {
         printf("hello\n");
         while (files = readdir(directory))
         {
@@ -58,7 +58,7 @@ void cmd_ls(char *path, int fl)
             else
             {
                 // strcpy(sort_arr[i],fname);
-                printf("%s",sort_arr[i]);
+                printf("%s", sort_arr[i]);
                 i++;
             }
         }
@@ -95,6 +95,7 @@ int main(int argc, char *argv[])
         }
         else
         {
+            printf("Enter valid commmand!\n Try command --help\n");
         }
     }
     return 0;

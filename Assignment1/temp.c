@@ -9,51 +9,52 @@
 #define len 80
 #endif
 
-
-void cmd_cat( char* path )
+void cmd_cat(char *path)
 {
-    FILE *fp = fopen( path,"r" );
-    if ( fp == NULL )
+    FILE *fp = fopen(path, "r");
+    if (fp == NULL)
     {
-        perror( "Error " );
+        perror("Error ");
     }
-    while( ! feof( fp ) ){
-        char read= fgetc( fp );
-        printf( "%c",read );
+    while (!feof(fp))
+    {
+        char read = fgetc(fp);
+        printf("%c", read);
     }
-    fclose( fp );
+    fclose(fp);
     return;
 }
 
-int main( int argc,char *argv[] )
+int main(int argc, char *argv[])
 {
-    char current_path[len*3];
-    getcwd( current_path,len*3 );
+    char current_path[len * 3];
+    getcwd(current_path, len * 3);
 
-    if ( argc == 1 )
+    if (argc == 1)
     {
         // numbe rof args supplied
-        printf( "so" );
+        printf("so");
     }
     else
     {
-        if ( strcmp( argv[1],"" ) == 0 )
+        if (strcmp(argv[1], "") == 0)
         {
             // printf( "normal/n" );
-            char filepath[len*3];
-            strcpy( filepath,current_path );
-            strcat( filepath,argv[2] );
-            printf( "\n%s",filepath );
-            cmd_cat( filepath );
+            char filepath[len * 3];
+            strcpy(filepath, current_path);
+            strcat(filepath, argv[2]);
+            printf("\n%s", filepath);
+            cmd_cat(filepath);
         }
-        else if ( strcmp( argv[1],"-l" ) == 0 )
+        else if (strcmp(argv[1], "-l") == 0)
         {
         }
         else
         {
+            printf("Enter valid commmand!\n Try command --help\n");
         }
     }
-    printf( "\n" );
+    printf("\n");
     return 0;
 }
 // pid_t pid;
@@ -83,10 +84,10 @@ int main( int argc,char *argv[] )
 //         //parent process
 // 		pid_t parent_id = waitpid( pid,&status,0 );
 //     }
-    
+
 //     return 0;
 
-//   
+//
 
 // int call_process( char *fp,char **input1 )
 // {   const char** input;

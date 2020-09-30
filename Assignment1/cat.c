@@ -57,15 +57,17 @@ int main(int argc, char *argv[])
         fclose(fp);
     }
     else if (strcmp(argv[1], "-n") == 0)
-    {   int ct =0;
+    {
+        int ct = 0;
         FILE *fp;
         char read_line[len];
         fp = fopen(filepath, "r");
         if (fp >= 0)
         {
-            while (fscanf(fp, "%[^\n]\n", read_line) != EOF){
+            while (fscanf(fp, "%[^\n]\n", read_line) != EOF)
+            {
                 ct++;
-                printf("%d. %s$\n",ct, read_line);
+                printf("%d. %s$\n", ct, read_line);
             }
         }
         else
@@ -77,6 +79,7 @@ int main(int argc, char *argv[])
     }
     else
     {
+        printf("Enter valid commmand!\n Try command --help\n");
     }
 
     return 0;

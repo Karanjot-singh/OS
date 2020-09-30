@@ -159,6 +159,7 @@ int main()
             }
             else
             {
+                printf("Enter valid commmand!\n Try command --help\n");
             }
         }
 
@@ -233,10 +234,10 @@ int main()
             call_process(file, input);
         }
         else if (strcmp(c.cmd, "--help") == 0)
-        {   
-            char *filepath="/home/karan/Desktop/sem/OS/Assignment1/files/readme.txt";
+        {
+            char *filepath = "/home/karan/Desktop/sem/OS/Assignment1/files/readme.txt";
             FILE *fp;
-            char read_line[3*len];
+            char read_line[3 * len];
             fp = fopen(filepath, "r");
             if (fp >= 0)
             {
@@ -253,7 +254,7 @@ int main()
         }
         else
         {
-            printf("Enter valid commmand!\n");
+            printf("Enter valid commmand!\n Try command --help\n");
         }
     }
 

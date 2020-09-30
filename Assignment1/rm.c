@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     }
     else
     {
+        printf("Enter valid commmand!\n Try command --help\n");
     }
     return 0;
 }
