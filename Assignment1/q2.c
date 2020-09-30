@@ -182,6 +182,13 @@ int main()
         }
         else if (strcmp(c.cmd, "date") == 0)
         {
+            char *file = "/home/karan/Desktop/sem/OS/Assignment1/date";
+            char *input[3]; //goes to argv
+            input[0] = "date";
+            input[1] = c.flag;
+            input[2] = NULL;
+
+            call_process(file, input);
         }
         else if (strcmp(c.cmd, "rm") == 0)
         {

@@ -17,3 +17,15 @@ In the child process, we want to run the command given by the user. So, we use o
 Try to guard your header files with #ifndef 
 
 cat n E
+
+Today is Saturday
+The month is February
+Today is 20 day of February
+Today is 51 day of 2016
+Today is 7 week of 2016
+The time is 20:22:49
+The date is 02/20/16
+The timezone is CET
+
+%A
+%a   %Z

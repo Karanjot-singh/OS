@@ -3,30 +3,74 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <unistd.h>
-#include <dirent.h>
+#include <time.h>
 #define len 80
 #endif
 
+int main( int argc, char *argv[] )
+{
+    char buff[len * 3] ;
+    char *name = argv[2] ;
 
-int main(int argc, char * argv[]) { 
-    char current_path[128]; 
-    getcwd(current_path, 128);
+    if ( strcmp( argv[1], "" ) ==0 )
+    {
+        time_t time_now = time( &time_now ) ;
 
-    if(argc == 1){ 
-        // numbe rof args supplied
-    } 
-    else { 
-        if(strcmp(argv[1], "") == 0) { 
-            printf("normal/n");
-        } 
-        else if(strcmp(argv[1], "-l") == 0) { 
+        if ( time_now ==-1 )
+        {
+             perror( "Error " ) ;
+        }
 
-        } 
-        else { 
-        } 
-    } 
-    printf("\n"); 
-    return 0; 
-} 
+        struct tm *timeInstance = localtime( &time_now ) ;
+
+        if ( timeInstance ==NULL )
+        {
+
+            perror( "Error " ) ;
+        }
+
+        strftime( buff, 3 * len, "%A, %d %B %Y %H:%M:%S %p %Z", timeInstance ) ;
+        puts( buff ) ;
+    }
+    else if ( strcmp( argv[1], "-u" ) ==0 )
+    {
+        time_t time_now = time( &time_now ) ;
+
+        if ( time_now ==-1 )
+        {
+             perror( "Error " ) ;
+        }
+ 
+        struct  tm *timeInstance = gmtime( &time_now ) ;
+
+        if ( timeInstance ==NULL )
+        {
+            perror( "Error " ) ;
+        }
+        strftime( buff, 3 * len, "%A %d %B %Y %H:%M:%S %p UTC", timeInstance ) ;
+        puts( buff ) ;
+    }
+    else if ( strcmp( argv[1], "-R" ) ==0 )
+    {
+        time_t time_now = time( &time_now ) ;
+
+        if ( time_now ==-1 )
+        {
+             perror( "Error " ) ;
+        }
+        struct  tm *timeInstance = localtime( &time_now ) ;
+
+        if ( timeInstance ==NULL )
+        {
+
+            perror( "Error " ) ;
+        }
+
+        strftime( buff, 3 * len, "%a, %d %b %Y %H:%M:%S %z", timeInstance ) ;
+        puts( buff ) ;
+    }
+    else
+    {
+    }
+    return 0 ;
+}
