@@ -1,13 +1,13 @@
-all: hello
-
-hello: hello.o
-	 gcc hello.c -o hello
-
-hello.o: hello.s
-	 gcc -c hello.c -o hello.o
-
-hello.s: hello.i
-	 gcc -S hello.c
-
-hello.i: hello.c
-	 gcc -E hello.c > hello.i
+all: main
+main: ls
+	 gcc q2.c && ./a.out
+ls: cat
+	 gcc ls.c -o ls
+cat: date
+	gcc cat.c -o cat
+date: rm
+	gcc date.c -o date
+rm: mkdir
+	gcc rm.c -o rm
+mkdir:
+	gcc mkdir.c -o mkdir
