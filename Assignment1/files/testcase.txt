@@ -1,10 +1,126 @@
-/home/karan/Desktop/sem/OS/Assignment1 $ mkdir  p
-/home/karan/Desktop/sem/OS/Assignment1 $ mkdir -m po
-Enter file mode 
-0777
-mkdir: created directory 'po'
- /home/karan/Desktop/sem/OS/Assignment1 $ 
- 
- /home/karan/Desktop/sem/OS/Assignment1 $ rm -i f.txt
-rm: remove regular empty file 'f.txt' y/n ?y
-/home/karan/Desktop/sem/OS/Assignment1 $ rm -d p
+
+> Terminal
+ Available commands:
+‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’
+‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’
+Format: [cmd] [flag] [args]
+/home/karan/Desktop/sem/OS/Assignment1 $ echo  hello
+hello
+/home/karan/Desktop/sem/OS/Assignment1 $ echo -n bad
+bad/home/karan/Desktop/sem/OS/Assignment1 $ ls 
+test
+ls
+cat
+mkdir
+readme.MD
+makefile
+a.out
+mkdir.c
+date.c
+..
+temp.c
+cm.c
+echo.c
+q2.c
+ls.c
+test.txt
+date
+rm
+cat.c
+rm.c
+q1
+files
+.
+/home/karan/Desktop/sem/OS/Assignment1 $ history 
+echo  hello
+echo -n bad
+history
+history
+ls
+ls
+ls 
+history 
+
+/home/karan/Desktop/sem/OS/Assignment1 $ history -c
+/home/karan/Desktop/sem/OS/Assignment1 $ history 
+history 
+
+/home/karan/Desktop/sem/OS/Assignment1 $ pwd
+/home/karan/Desktop/sem/OS/Assignment1 
+/home/karan/Desktop/sem/OS/Assignment1 $ ls 
+test
+ls
+cat
+mkdir
+readme.MD
+makefile
+a.out
+mkdir.c
+date.c
+..
+temp.c
+cm.c
+echo.c
+q2.c
+ls.c
+test.txt
+date
+rm
+cat.c
+rm.c
+q1
+files
+.
+/home/karan/Desktop/sem/OS/Assignment1 $ cd q1
+/home/karan/Desktop/sem/OS/Assignment1 $ cd  q1
+/home/karan/Desktop/sem/OS/Assignment1/q1 $ ls 
+makefile
+q1.c
+..
+readme.txt
+file.csv
+.
+/home/karan/Desktop/sem/OS/Assignment1/q1 $ cd  ..
+/home/karan/Desktop/sem/OS/Assignment1 $ ls
+test
+ls
+cat
+mkdir
+readme.MD
+makefile
+a.out
+mkdir.c
+date.c
+..
+temp.c
+cm.c
+echo.c
+q2.c
+ls.c
+test.txt
+date
+rm
+cat.c
+rm.c
+q1
+files
+.
+/home/karan/Desktop/sem/OS/Assignment1 $ cat  test.txt
+hekdfkashflksadfj;lsf
+sdkjfaskjdfhkjsadf
+sda'flhkjasdfljsadhf
+sadkjfsjklhfuo
+/home/karan/Desktop/sem/OS/Assignment1 $ rm -i temp.c
+rm: remove regular empty file 'temp.c' y/n ?y
+/home/karan/Desktop/sem/OS/Assignment1 $ mkdir -v hello
+mkdir: created directory 'hello'
+/home/karan/Desktop/sem/OS/Assignment1 $ rm -d hello
+/home/karan/Desktop/sem/OS/Assignment1 $ date -m
+Enter valid commmand!
+ Try command --help
+/home/karan/Desktop/sem/OS/Assignment1 $ date 
+Wednesday, 30 September 2020 23:30:45 PM IST
+/home/karan/Desktop/sem/OS/Assignment1 $ date -u
+Wednesday 30 September 2020 18:01:03 PM UTC
+/home/karan/Desktop/sem/OS/Assignment1 $ history -w
+/home/karan/Desktop/sem/OS/Assignment1 $ exit

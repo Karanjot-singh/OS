@@ -1,2 +1,17 @@
+history 
+pwd
+ls 
+cd q1
+cd  q1
+ls 
+cd  ..
+ls
+cat  test.txt
+rm -i temp.c
+mkdir -v hello
+rm -d hello
+date
+date 
+date -u
 history -w
 

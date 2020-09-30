@@ -35,5 +35,6 @@ void echoe(char *input)
         else
             printf("%c", input[i]);
     }
+    printf("\n");
 }
 

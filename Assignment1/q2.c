@@ -123,7 +123,7 @@ int main()
             {
                 printf("%s\n", history);
             }
-            //
+            
             else if (strcmp(c.flag, "-c") == 0)
             {
                 strcpy(history, "");
