@@ -153,23 +153,32 @@ int main()
             }
             else if (strcmp(c.flag, "") == 0)
             { //default cd
-                if (chdir(c.arg) != 0){
+                if (chdir(c.arg) != 0)
+                {
                     perror("cd failed ");
                     continue;
                 }
             }
         }
         else if (strcmp(c.cmd, "ls") == 0)
-        {   
+        {
             char *file = "/home/karan/Desktop/sem/OS/Assignment1/ls";
-            char *argv[3];
-            argv[0] = c.cmd;
-            argv[1] = c.flag;
-            argv[2] = NULL;
-            call_process(file, argv);
+            char *input[3]; //goes to argv
+            input[0] = c.cmd;
+            input[1] = c.flag;
+            input[2] = NULL;
+            call_process(file, input);
         }
         else if (strcmp(c.cmd, "cat") == 0)
         {
+            char *file = "/home/karan/Desktop/sem/OS/Assignment1/cat";
+            char *input[4]; //goes to argv
+            input[0] = "cat";
+            input[1] = c.flag;
+            input[2] = c.arg;
+            input[3] = NULL;
+
+            call_process(file, input);
         }
         else if (strcmp(c.cmd, "date") == 0)
         {
@@ -179,6 +188,14 @@ int main()
         }
         else if (strcmp(c.cmd, "mkdir") == 0)
         {
+            char *file = "/home/karan/Desktop/sem/OS/Assignment1/mkdir";
+            char *input[4]; //goes to argv
+            input[0] = "mkdir";
+            input[1] = c.flag;
+            input[2] = c.arg;
+            input[3] = NULL;
+
+            call_process(file, input);
         }
         else
         {
