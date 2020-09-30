@@ -56,7 +56,7 @@ int main()
 
 	if (pid < 0)
 	{
-		printf("Error in fork process");
+		perror("Error in fork process");
 		return 1;
 	}
 
