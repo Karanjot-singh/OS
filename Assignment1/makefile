@@ -11,3 +11,6 @@ rm: mkdir
 	gcc rm.c -o rm
 mkdir:
 	gcc mkdir.c -o mkdir
+clean :
+	rm -f *.o ls cat date rm mkdir
+	rm -f *.out a  

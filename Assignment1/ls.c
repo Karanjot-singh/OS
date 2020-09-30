@@ -9,41 +9,65 @@
 #define len 80
 #endif
 
-void cmd_ls(char *path){
-    DIR* directory;
+void cmd_ls(char *path, int fl)
+{
+    DIR *directory;
     struct dirent *files;
     //current directory == .
-    directory= opendir(path);
-    printf("in ls func\n");
-    if(directory==NULL){
+    directory = opendir(path);
+    // printf("in ls func\n");
+    if (directory == NULL)
+    {
         printf("dir null");
         perror("Error");
     }
-    while(files = readdir(directory)){
-        printf("%s\n",files->d_name);
+    while (files = readdir(directory))
+    {
+        if (fl == 1) // ls -a
+            printf("%s\n", files->d_name);
+        else if (fl == 0) // ls -U
+        {
+            char *fname = files->d_name;
+            if (strcmp(fname, ".")==0 || strcmp(fname, "..")==0)
+            {
+                continue;
+            }
+            else
+                printf("%s\n", files->d_name);
+        }
     }
     closedir(directory);
 }
 
-int main(int argc, char * argv[]) { 
-    char current_path[128]; 
-    getcwd(current_path, 128);
-    printf("dir: %s",current_path);
-    if(argc == 1){ 
+int main(int argc, char *argv[])
+{
+    char current_path[2 * len];
+    getcwd(current_path, 2 * len);
+    // printf("dir: %s",current_path);
+    if (argc == 1)
+    {
         // numbe rof args supplied
-        cmd_ls(current_path); 
-    } 
-    else { 
-        if(strcmp(argv[1], "") == 0) { 
-            printf("normal\n");
-            cmd_ls(current_path); 
-        } 
-        else if(strcmp(argv[1], "-l") == 0) { 
-
-        } 
-        else { 
-        } 
-    } 
-    printf("\n"); 
-    return 0; 
-} 
+        printf("this");
+        cmd_ls(current_path, 0);
+    }
+    else
+    {
+        if (strcmp(argv[1], "-U") == 0)
+        {
+            // printf("normal\n");
+            cmd_ls(current_path, 0);
+        }
+        else if (strcmp(argv[1], "-a") == 0)
+        {
+            cmd_ls(current_path, 1);
+        }
+        else if (strcmp(argv[1], "") == 0)
+        {
+            cmd_ls(current_path, 0);
+        }
+        else
+        {
+        }
+    }
+    return 0;
+}

@@ -160,13 +160,12 @@ int main()
             }
         }
         else if (strcmp(c.cmd, "ls") == 0)
-        {
-            char *file = "ls";
-            char *argv[4];
+        {   
+            char *file = "/home/karan/Desktop/sem/OS/Assignment1/ls";
+            char *argv[3];
             argv[0] = c.cmd;
             argv[1] = c.flag;
-            argv[2] = c.arg;
-            argv[3] = NULL;
+            argv[2] = NULL;
             call_process(file, argv);
         }
         else if (strcmp(c.cmd, "cat") == 0)
