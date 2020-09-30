@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
+#include<sys/wait.h> 
+#include <sys/types.h>
 #include "cm.c"
 #include "echo.c"
 #define len 80
@@ -14,9 +16,11 @@ void echoe(char *input);
 void echo(char *input);
 void display();
 void trim_n(char *input);
+int active = 1;
 
-int call_process(char *file, char *input)
-{
+int call_process(char *file, char **input1)
+{   const char** input;
+    strcpy(input, input1);
     pid_t pid;
     int status;
     pid = fork();
@@ -45,14 +49,20 @@ int call_process(char *file, char *input)
 
     return 0;
 }
+void prevent_error(int n){
+    //outside proccess return exit code to continue while loop
+    if (n<0)
+    active==2;
+
+}
 
 int main()
 {
-    int active = 1;
+
     char history[10 * len] = "";
     display();
 
-    while (active == 1)
+    while (active >= 1)
     {
         char command_temp[len][len];
         char str[3 * len];
@@ -154,12 +164,13 @@ int main()
         }
         else if (strcmp(c.cmd, "ls") == 0)
         {
-            char *file = "ls";
-            char *input[3];
-            input[0] = c.cmd;
-            input[1] = c.flag;
-            input[2] = c.arg;
-            call_process(file,input);
+            char *file = "";
+            char *argv[4];
+            argv[0] = c.cmd;
+            argv[1] = c.flag;
+            argv[2] = c.arg;
+            argv[3]=NULL;
+            call_process(file,&argv);
         }
         else if (strcmp(c.cmd, "cat") == 0)
         {

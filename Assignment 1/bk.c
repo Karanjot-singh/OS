@@ -1,81 +1,68 @@
+#ifndef _q2
+#define _q2
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
-#include "cd.c"
+#include<sys/wait.h> 
+#include <sys/types.h>
+#include "cm.c"
+#include "echo.c"
 #define len 80
-/*
-cd l p 
-echo Options:
-      -n    do not append a newline
-      -e    enable interpretation of the following backslash escapes
-history -c , -w
+#endif
 
-date -R, -u
-ls -a ls-h
-rm -i -d
+void echoe(char *input);
+void echo(char *input);
+void display();
+void trim_n(char *input);
+int active = 1;
 
-*/
-struct command
-{
-    char cmd[len];
-    char flag[len];
-    char arg[len];
-};
+int call_process(char *file, char **input1)
+{   const char** input;
+    strcpy(input, input1);
+    pid_t pid;
+    int status;
+    pid = fork();
 
-void cmd_cd(struct command *c);
-
-void display()
-{
-    printf("> Terminal\n Available commands:\n");
-    printf("‘cd’, ‘echo’, ‘history’, ‘pwd’ and ‘exit’\n");
-    printf("‘ls’, ‘cat’, ‘date’, ‘rm’ and ‘mkdir’\n");
-    printf("Format: [cmd] [flag] [args]\n");
-}
-void trim_n(char *input)
-{
-    size_t size = strlen(input);
-    if ((input[size - 1] == '\n') && (size > 0))
-        input[size - 1] = '\0';
-}
-
-void echo(char *input)
-{
-    for (int i = 0; i < strlen(input); ++i)
+    if (pid < 0)
     {
-        if (input[i] == '\\' && input[i + 1] == '\\')
-            printf("\\");
-        else if (input[i] == '\\')
-            continue;
-        else
-            printf("%c", input[i]);
+        perror("Error ");
+        return -1;
     }
-}
-void echoe(char *input)
-{
-    // Implemented 3 escape sequences \t, \n ...
-    for (int i = 0; i < strlen(input); ++i)
+
+    else if (pid == 0)
     {
-        if (input[i] == '\\' && input[i + 1] == '\t')
-            printf("    ");
-        else if (input[i] == '\\' && input[i + 1] == '\n')
-            printf("\n");
-        else if (input[i] == '\\')
-            continue;
-        else
-            printf("%c", input[i]);
+        //child process
+        if (execvp(file, input) < 0)
+        {
+            printf("*** ERROR: exec failed\n");
+            exit(1);
+        }
+        exit(0);
     }
+    else
+    {
+        //parent process
+        pid_t parent_id = waitpid(pid, &status, 0);
+    }
+
+    return 0;
+}
+void prevent_error(int n){
+    //outside proccess return exit code to continue while loop
+    if (n<0)
+    active==2;
+
 }
 
 int main()
 {
-    int active = 1;
-    char buff[len];
+
     char history[10 * len] = "";
     display();
 
-    while (active == 1)
+    while (active >= 1)
     {
         char command_temp[len][len];
         char str[3 * len];
@@ -128,16 +115,17 @@ int main()
             {
                 echoe(c.arg);
             }
-            else{
-
+            else
+            {
                 perror("Invalid input/n try --help ");
                 continue;
             }
         }
+        // <history>
         else if (strcmp(c.cmd, "history") == 0)
         {
             if (strcmp(c.flag, "") == 0)
-            { 
+            {
                 printf("%s/n", history);
             }
             //
@@ -149,10 +137,11 @@ int main()
             else if (strcmp(c.flag, "-w") == 0)
             {
                 FILE *fp = fopen("/home/karan/Desktop/sem/OS/Assignment 1/files/history.txt", "w");
-                if (fp == NULL){
+                if (fp == NULL)
+                {
                     perror("Error ");
                     continue;
-                    }
+                }
                 fprintf(fp, "%s\n", history);
                 fclose(fp);
             }
@@ -160,20 +149,46 @@ int main()
 
         //<cd>
         else if (strcmp(c.cmd, "cd") == 0)
-        {
-            //cd implementation
-
-            if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0){
+        { //cd implementation
+            if (strcmp(c.arg, "") == 0 && strcmp(c.flag, "") == 0)
+            {
                 perror("Error ");
                 continue;
             }
-
-            // else if (strcmp(c.flag, "") == 0)
-            // { //default cd
-            //     chdir(c.arg);
-            //     printf("%s\n", getcwd(buff, len));
-            // }
+            else if (strcmp(c.flag, "") == 0)
+            { //default cd
+                chdir(c.arg);
+                char buff[len];
+                printf("%s\n", getcwd(buff, len));
+            }
+        }
+        else if (strcmp(c.cmd, "ls") == 0)
+        {
+            char *file = "";
+            char *argv[4];
+            argv[0] = c.cmd;
+            argv[1] = c.flag;
+            argv[2] = c.arg;
+            argv[3]=NULL;
+            call_process(file,&argv);
+        }
+        else if (strcmp(c.cmd, "cat") == 0)
+        {
+        }
+        else if (strcmp(c.cmd, "date") == 0)
+        {
+        }
+        else if (strcmp(c.cmd, "rm") == 0)
+        {
+        }
+        else if (strcmp(c.cmd, "mkdir") == 0)
+        {
+        }
+        else
+        {
+            printf("Enter valid commmand!\n");
         }
     }
+
     return 0;
 }
