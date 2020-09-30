@@ -18,15 +18,14 @@ void display();
 void trim_n(char *input);
 int active = 1;
 
-int call_process(char *file, char **input1)
-{   const char** input;
-    strcpy(input, input1);
+int call_process(char *file, char **input)
+{   
     pid_t pid;
     int status;
     pid = fork();
 
     if (pid < 0)
-    {
+    {   printf("f");
         perror("Error ");
         return -1;
     }
@@ -164,13 +163,13 @@ int main()
         }
         else if (strcmp(c.cmd, "ls") == 0)
         {
-            char *file = "";
+            char *file = "ls";
             char *argv[4];
             argv[0] = c.cmd;
             argv[1] = c.flag;
             argv[2] = c.arg;
             argv[3]=NULL;
-            call_process(file,&argv);
+            call_process(file,argv);
         }
         else if (strcmp(c.cmd, "cat") == 0)
         {

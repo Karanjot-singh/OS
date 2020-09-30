@@ -31,16 +31,18 @@ int main(int argc, char * argv[]) {
     getcwd(current_path, 128);
 
     if(argc == 1){ 
-        // ls(current_path, 0); 
+        // numbe rof args supplied
+        cmd_ls(); 
     } 
     else { 
         if(strcmp(argv[1], "") == 0) { 
             printf("normal/n");
             cmd_ls(); 
-        } else if(strcmp(argv[1], "-r") == 0) { 
-            ls_r(current_path); 
-        } else { 
-            ls(current_path, 1);  // ls -a 
+        } 
+        else if(strcmp(argv[1], "-l") == 0) { 
+            
+        } 
+        else { 
         } 
     } 
     printf("\n"); 
