@@ -8,22 +8,21 @@ int counter = 10;
 
 void *parent_thread()
 {
-	printf("Parent thread\n");
-
 	while (counter != 100)
 	{
 		++counter;
+		printf("Parent thread\n");
 		printf("%d ", counter);
 	}
 	printf("\n");
 }
 void *child_thread()
 {
-	printf("Child thread\n");
 
 	while (counter != -90)
 	{
 		--counter;
+		printf("Child thread\n");
 		printf("%d ", counter);
 	}
 	printf("\n");
