@@ -26,9 +26,9 @@ int main()
 		while (counter != -90)
 		{
 			--counter;
-			printf("%d\n", counter);
+			printf("%d ", counter);
 		}
-
+		printf("\n");
 		exit(0);
 	}
 
@@ -40,9 +40,9 @@ int main()
 		while (counter != 100)
 		{
 			++counter;
-			printf("%d\n", counter);
+			printf("%d ", counter);
 		}
-
+		printf("\n");
 		return 0;
 	}
 }
