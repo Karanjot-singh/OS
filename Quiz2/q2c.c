@@ -17,9 +17,6 @@ int main()
 	msgrcv(msg_no, &msg, sizeof(msg), 1, 0);
 	printf("Data Received is : %s \n",
 		   msg.text);
-	msgrcv(msg_no, &msg, sizeof(msg), 1, 0);
-	printf("Data Received is : %s \n",
-		   msg.text);
 	msgctl(msg_no, IPC_RMID, NULL);
 	return 0;
 }

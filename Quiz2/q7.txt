@@ -1,1 +1,3 @@
-
+Applying the bankers algorithm,
+It is found that the sysytem is in safe state.
+A possible safe sequence is P3 >P2>P1>P0>P4
