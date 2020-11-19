@@ -18,7 +18,6 @@ int main()
 	key_t ID = ftok("Karanjot", 65);
 	struct msg_st msg;
 	int msg_no = msgget(ID, 0666 | IPC_CREAT);
-	printf("Write Data : ");
 	char content[2000];
 	int fd = open("para1.txt", O_RDONLY);
 
@@ -43,14 +42,16 @@ int main()
 			char buff[500];
 			strncat(buff, &content[prev_index], char_count);
 			strncat(buff, &ch, 1);
-			// printf("%s\n", buff);
-			strcpy(msg.text,buff);
+			printf("%s\n", buff);
+			strcpy(msg.text, buff);
 			msg.type = 1;
 			msgsnd(msg_no, &msg, sizeof(msg), 0);
 			prev_index += char_count + 1;
 			char_count = 0;
 			strcpy(buff, "");
 		}
+		else if (content[i] == '\n' && content[i + 1] == '\n')
+			break;
 		else
 			char_count++;
 	}
