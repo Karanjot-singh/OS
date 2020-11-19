@@ -1,16 +1,11 @@
-#include <pthread.h>
 #include <semaphore.h>
 #include <stdio.h>
 #include <sys/ipc.h>
+#include <pthread.h>
 #include <sys/shm.h>
 
-/*
-This program provides a possible solution for first readers writers problem using mutex and semaphore.
-I have used 10 readers and 5 producers to demonstrate the solution. You can always play with these values.
-*/
-
-pthread_mutex_t mutex ;
 sem_t semaphore1 ;
+pthread_mutex_t mutex ;
 int reader_count = 0 ;
 int mem_id ;
 key_t key ;
@@ -19,8 +14,6 @@ key_t key ;
 void *writer(void *wno )
 {
 	sem_wait(&semaphore1 ) ;
-	// str="Testing" ;
-	// shmdt(str ) ;
 	int *ptr = (int * )shmat(mem_id, (void * )0, 0 ) ;
 	*ptr = 5 ;
 	printf(" Writer%d- writes %d\n", (*( (int * )wno ) ), *ptr ) ;
@@ -29,26 +22,23 @@ void *writer(void *wno )
 }
 void *reader(void *rno )
 {
-	// Reader acquire the lock before modifying reader_count
 	pthread_mutex_lock(&mutex ) ;
 	reader_count++ ;
-	if (reader_count == 1 )
+	if (reader_count ==1 )
 	{
-		sem_wait(&semaphore1 ) ; // If this id the first reader, then it will block the writer
+		sem_wait( &semaphore1 ) ;
 	}
 	pthread_mutex_unlock(&mutex ) ;
-	// Reading Section
 	int *ptr = (int * )shmat(mem_id, ( void * )0, 0 ) ;
 	printf(" Reader%d- reads %d\n", *( ( int * )rno ), *ptr ) ;
 	shmdt(ptr ) ;
 	shmctl(mem_id, IPC_RMID, NULL ) ;
 
-	// Reader acquire the lock before modifying reader_count
 	pthread_mutex_lock(&mutex ) ;
 	reader_count-- ;
-	if (reader_count == 0 )
+	if (reader_count ==0 )
 	{
-		sem_post(&semaphore1 ) ; // If this is the last reader, it will wake up the writer.
+		sem_post(&semaphore1 ) ;
 	}
 	pthread_mutex_unlock(&mutex ) ;
 }
