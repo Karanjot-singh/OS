@@ -18,25 +18,29 @@ void *writer(void *wno )
 	*ptr = 5 ;
 	printf(" Writer%d- writes %d\n", (*( (int * )wno ) ), *ptr ) ;
 	shmdt(ptr ) ;
+
 	sem_post(&semaphore1 ) ;
 }
 void *reader(void *rno )
 {
 	pthread_mutex_lock(&mutex ) ;
 	reader_count++ ;
-	if (reader_count ==1 )
+	if (reader_count==1 )
 	{
 		sem_wait( &semaphore1 ) ;
 	}
 	pthread_mutex_unlock(&mutex ) ;
 	int *ptr = (int * )shmat(mem_id, ( void * )0, 0 ) ;
 	printf(" Reader%d- reads %d\n", *( ( int * )rno ), *ptr ) ;
+
 	shmdt(ptr ) ;
 	shmctl(mem_id, IPC_RMID, NULL ) ;
 
 	pthread_mutex_lock(&mutex ) ;
 	reader_count-- ;
-	if (reader_count ==0 )
+
+
+	if (reader_count==0 )
 	{
 		sem_post(&semaphore1 ) ;
 	}
