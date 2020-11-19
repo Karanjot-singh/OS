@@ -41,22 +41,10 @@ void *reader(void *rno)
 	}
 	pthread_mutex_unlock(&mutex);
 	// Reading Section
-	key_t key = ftok("Karanjot", 65);
-
-	// shmget returns an identifier in shmid
-	int shmid = shmget(key, 1024, 0666 | IPC_CREAT);
-
-	// shmat to attach to shared memory
-	char *str = (char *)shmat(shmid, (void *)0, 0);
-
-	printf("Data read from memory: %s\n", str);
-
-	//detach from shared memory
-	shmdt(str);
-
-	// destroy the shared memory
-	shmctl(shmid, IPC_RMID, NULL);
-	printf("Reader %d: read cnt as %d\n", *((int *)rno), cnt);
+	int *ptr = (int *)shmat(shmid, (void *)0, 0);
+	printf("Reader %d: read cnt as %d\n", *((int *)rno), *ptr);
+    shmdt(ptr); 
+    shmctl(shmid,IPC_RMID,NULL);
 
 	// Reader acquire the lock before modifying reader_count
 	pthread_mutex_lock(&mutex);
