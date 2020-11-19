@@ -29,6 +29,9 @@ int main()
 
 	read(fd, content, sizeof(content) - 1);
 	/*Process Data for getData()*/
+	content[998] = '\n';
+	content[999] = '\n';
+	
 	content[2000] = '\0';
 	int prev_index = 0;
 	int char_count = 0;
