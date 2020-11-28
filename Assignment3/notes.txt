@@ -1,0 +1,4 @@
+generally cfs scheduler priortises the process with lower vruntime over other processes but in the given case our scheduler priortises process with higher soft realtime
+
+vruntime always increases , soft runtime always decreases.
+soft time is like the time slot you want alloted to the proces 90% of the time
