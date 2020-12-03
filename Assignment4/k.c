@@ -1,65 +1,114 @@
-#include <stdio.h>
-#include <string.h>
-#include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <pthread.h>
 
-// Semaphore
-// {
-//     int n;
-//     mutex *m_count; //unlocked initially
-//     mutex *m_queue; //locked initially
-// };
-
-struct countingSemaphore
+typedef struct
 {
-    int count;
-    pthread_mutex_t numLock; //For locking the number of semaphores allowed into CS U
-    pthread_mutex_t csLock;  // For entry to the critical section Q
-
+    pthread_mutex_t lock;
+    pthread_cond_t wait;
+    int counter;
+    int waiters;
 } my_semaphore;
 
-void wait()
+my_semaphore *s;
+
+
+my_semaphore *InitSem(int count)
 {
-    // m_count.lock();
-    pthread_mutex_lock(&my_semaphore.numLock);
-    my_semaphore.count -= 1;
-    if (my_semaphore.count < 0)
+    my_semaphore *s;
+
+    s = (my_semaphore *)malloc(sizeof(my_semaphore));
+    if (s == NULL)
     {
-        // m_count.unlock();
-        pthread_mutex_unlock(&my_semaphore.numLock);
-        // m_queue.lock();     //wait
-        pthread_mutex_lock(&my_semaphore.csLock);
+        return (NULL);
     }
-    // m_count.unlock();       //unlock signal's lock
-    pthread_mutex_unlock(&my_semaphore.csLock);
+    s->counter = count;
+    s->waiters = 0;
+    pthread_cond_init(&(s->wait), NULL);
+    pthread_mutex_init(&(s->lock), NULL);
+
+    return (s);
 }
 
-void signal()
+void P(my_semaphore *s)
 {
-    // m_count.lock();
-    pthread_mutex_lock(&my_semaphore.numLock);
-    // n = n+1;
-    my_semaphore.count += 1;
-    // if(n <= 0){
-    if (my_semaphore.count <= 0)
+    pthread_mutex_lock(&(s->lock));
+
+    s->counter--;
+
+    while (s->counter < 0)
     {
-        // m_queue.unlock();   //leave m_count locked
-        pthread_mutex_unlock(&my_semaphore.csLock);
+        /*
+                 * maintain my_semaphorephore invariant
+                 */
+        if (s->waiters < (-1 * s->counter))
+        {
+            s->waiters++;
+            pthread_cond_wait(&(s->wait), &(s->lock));
+            s->waiters--;
+        }
+        else
+        {
+            break;
+        }
     }
-    else
-    {
-        // m_count.unlock();
-        pthread_mutex_unlock(&my_semaphore.numLock);
-    }
+
+    pthread_mutex_unlock(&(s->lock));
+
+    return;
 }
 
-int main()
+void V(my_semaphore *s)
 {
 
-    if (pthread_mutex_init(&my_semaphore.numLock, NULL) != 0)
+    pthread_mutex_lock(&(s->lock));
+
+    s->counter++;
+
+    if (s->counter <= 0)
     {
-        printf("\n mutex init failed\n");
-        return 1;
+        pthread_cond_signal(&(s->wait));
     }
+
+    pthread_mutex_unlock(&(s->lock));
 }
+
+
+
+void* thread() 
+{ 
+    //wait 
+    P(s); 
+    printf("\nEntered..\n"); 
+  
+    //critical section 
+    sleep(4); 
+      
+    //signal 
+    printf("\nJust Exiting...\n"); 
+    V(s); 
+} 
+  
+  
+int main() 
+{ 
+    s = (my_semaphore *)malloc(sizeof(my_semaphore));
+    if (s == NULL)
+    {
+        return (NULL);
+    }
+    s->counter = 1;
+    s->waiters = 0;
+    pthread_cond_init(&(s->wait), NULL);
+    pthread_mutex_init(&(s->lock), NULL);
+    // sem_init(&s, 0, 1); 
+    pthread_t t1,t2; 
+    pthread_create(&t1,NULL,thread,NULL); 
+    sleep(2); 
+    pthread_create(&t2,NULL,thread,NULL); 
+    pthread_join(t1,NULL); 
+    pthread_join(t2,NULL); 
+    // sem_destroy(&s); 
+    return 0; 
+} 
