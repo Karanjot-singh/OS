@@ -5,67 +5,45 @@
 // #include <semaphore.h>
 #define TRUE 1
 #define MAX 50
-typedef struct
+
+typedef struct sem_t
 {
+    ssize_t sem_value;
+    pthread_cond_t counter;
     pthread_mutex_t mutex;
-    pthread_cond_t wait;
-    int counter;
-    int waiting_threads;
-} my_semaphore;
+} sem_t;
 
-
-void sem_init(my_semaphore *s,int temp, int count)
+int sem_init(sem_t *my_semaphore, int pshared, int value)
 {
-    s = (my_semaphore *)malloc(sizeof(my_semaphore));
-    if (s == NULL)
-    {
-        perror("Error: ");
-        return;
-    }
-    s->waiting_threads = 0;
-    s->counter = count;
-    pthread_cond_init(&(s->wait), NULL);
-    pthread_mutex_init(&(s->mutex), NULL);
+    my_semaphore->sem_value = value;
+    pthread_mutex_init(&my_semaphore->mutex, NULL);
+    pthread_cond_init(&my_semaphore->counter, NULL);
+    return 0;
 }
-
-void sem_wait(my_semaphore *s)
+void sem_post(sem_t *my_semaphore)
 {
-    pthread_mutex_lock(&(s->mutex));
-    s->counter--;
-
-    while (s->counter < 0)
+    if (!pthread_mutex_trylock(&my_semaphore->mutex))
     {
-        //Invariant incase pthread_cond_signal releases more than 1 thread fro the blocked queues
-        if (s->waiting_threads < (-1 * s->counter))
-        {
-            s->waiting_threads++;
-            pthread_cond_wait(&(s->wait), &(s->mutex));
-            s->waiting_threads--;
-        }
-        else
-        {
-            break;
-        }
+        // mutex locked
+        // pthread_mutex_lock(&my_semaphore->mutex);
+        my_semaphore->sem_value++;
+        pthread_cond_signal(&my_semaphore->counter);
+        pthread_mutex_unlock(&my_semaphore->mutex);
     }
-
-    pthread_mutex_unlock(&(s->mutex));
-
-    return;
 }
-
-void sem_post(my_semaphore *s)
+void sem_wait(sem_t *my_semaphore)
 {
-
-    pthread_mutex_lock(&(s->mutex));
-
-    s->counter++;
-
-    if (s->counter <= 0)
+    // pthread_mutex_lock(&my_semaphore->mutex);
+    if (!pthread_mutex_trylock(&my_semaphore->mutex))
     {
-        pthread_cond_signal(&(s->wait));
+        while (my_semaphore->sem_value == 0)
+        {
+            pthread_cond_wait(&my_semaphore->counter, &my_semaphore->mutex);
+            /*unlock wait relock mutex*/
+        }
+        my_semaphore->sem_value--;
+        pthread_mutex_unlock(&my_semaphore->mutex);
     }
-
-    pthread_mutex_unlock(&(s->mutex));
 }
 
 int num_forks;
@@ -73,9 +51,9 @@ int num_forks;
 int state[MAX]; //0 while eating 1 when ready to eat
 int phil[MAX];
 
-my_semaphore *semaphore_array[MAX];
-my_semaphore *bowl1,bowl2;
-my_semaphore *fork_mutex;
+sem_t semaphore_array[MAX];
+sem_t *bowl1, bowl2;
+sem_t *fork_mutex;
 
 void setValues()
 {
@@ -84,7 +62,8 @@ void setValues()
 }
 int leftForkNumber(int philosopherNo)
 {
-    return (philosopherNo + 4) % (num_forks);
+
+    return (philosopherNo + num_forks - 1) % (num_forks);
 }
 int rightForkNumber(int philosopherNo)
 {
@@ -95,38 +74,39 @@ void eat(int philosopherNo)
 {
     if (state[philosopherNo] == 1)
     {
+        pid_t tid = gettid();
+
         // If right and left philosopher arent eating
         if (state[rightForkNumber(philosopherNo)] != 0 && state[leftForkNumber(philosopherNo)] != 0)
         {
 
-            printf("Philosopher %d receives fork no. %d and %d\n", philosopherNo + 1, leftForkNumber(philosopherNo) + 1, philosopherNo + 1);
+            printf("Philosopher %d acquires Fork %d and %d\n", tid, leftForkNumber(philosopherNo) + 1, tid);
             sem_wait(&bowl1);
-            printf("Philosopher %d acquired bowl 1\n", philosopherNo + 1);
+            printf("Philosopher %d acquired Bowl 1\n", tid);
             sem_wait(&bowl2);
-            printf("Philosopher %d acquired bowl 2\n", philosopherNo + 1);
+            printf("Philosopher %d acquired Bowl 2\n", tid);
 
-            printf("Philosopher %d eats!\n", philosopherNo + 1);
+            printf("PHILOSOPHER %d EATS\n", tid);
             //eating
             state[philosopherNo] = 0;
             sem_post(&semaphore_array[philosopherNo]);
             // To avoid deadlock in case context switch after releasing bowl 1
-            printf("Philosopher %d released bowl 2\n", philosopherNo + 1);
+            printf("Philosopher %d released bowl 2\n", tid);
 
             sem_post(&bowl2);
-            printf("Philosopher %d released bowl 1\n", philosopherNo + 1);
+            printf("Philosopher %d released bowl 1\n", tid);
 
             sem_post(&bowl1);
-
         }
         //Right
         else if (state[rightForkNumber(philosopherNo)] != 0)
         {
-            printf("Philosopher %d receives fork no. %d\n", philosopherNo + 1, philosopherNo + 1);
+            printf("Philosopher %d acquires Fork %d\n", tid, tid);
         }
         //left
         else if (state[leftForkNumber(philosopherNo)] != 0)
         {
-            printf("Philosopher %d receives fork no. %d\n", leftForkNumber(philosopherNo) + 1, leftForkNumber(philosopherNo) + 1);
+            printf("Philosopher %d acquires Fork %d\n", tid, leftForkNumber(philosopherNo) + 1);
         }
     }
 }
@@ -148,7 +128,10 @@ void forkDown(int philosopherNo)
 
     sem_wait(&fork_mutex);
     state[philosopherNo] = 2;
-    printf("Philosopher %d puts down fork %d and %d \n", philosopherNo + 1, leftForkNumber(philosopherNo) + 1, philosopherNo + 1);
+    pid_t tid = gettid();
+
+    printf("Philosopher %d puts down Fork %d\n", tid, leftForkNumber(philosopherNo) + 1);
+    printf("Philosopher %d puts down Fork %d\n", tid, tid);
     eat(leftForkNumber(philosopherNo));
     ;
     eat(rightForkNumber(philosopherNo));
@@ -167,29 +150,21 @@ void *philospherRoutine(void *num)
     }
 }
 
-void initi(my_semaphore *s){
-    pthread_cond_init(&(s->wait), NULL);
-    pthread_mutex_init(&(s->mutex), NULL);
-}
-
 int main()
 {
     printf("Enter Number of Philosophers:\n");
     scanf("%d", &num_forks);
     setValues();
     pthread_t thread_id[num_forks];
-    initi(fork_mutex);
-    initi(bowl1);
     sem_init(&fork_mutex, 0, 1);
     sem_init(&bowl1, 0, 1);
 
     for (int i = 0; i < num_forks; ++i)
     {
-        initi(&semaphore_array[i]);
         sem_init(&semaphore_array[i], 0, 0);
         pthread_create(&thread_id[i], NULL, philospherRoutine, &phil[i]);
 
-        printf("Philosopher %d is thinking\n", i + 1);
+        // printf("Philosopher %d is thinking\n", i + 1);
     }
     sem_init(&bowl2, 0, 1);
     for (int i = 0; i < num_forks; ++i)

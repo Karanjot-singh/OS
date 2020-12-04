@@ -15,3 +15,8 @@ The mutex object referenced by mutex shall be locked by calling pthread_mutex_lo
 The pthread_mutex_trylock() function attempts to acquire ownership of the mutex specified without blocking the calling thread. If the mutex is currently locked by another thread, the call to pthread_mutex_trylock() returns an error of EBUSY.
 
 A failure of EDEADLK indicates that the mutex is already held by the calling thread.
+
+if(!pthread_mutex_trylock(&demoMutex))
+{
+  // mutex locked
+}

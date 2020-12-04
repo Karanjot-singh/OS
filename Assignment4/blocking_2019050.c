@@ -1,8 +1,43 @@
+#include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <pthread.h>
-#include <semaphore.h>
+// #include <semaphore.h>
 #define TRUE 1
 #define MAX 50
+
+typedef struct sem_t
+{
+    ssize_t sem_value;
+    pthread_cond_t counter;
+    pthread_mutex_t mutex;
+} sem_t;
+
+int sem_init(sem_t *my_semaphore, int pshared, int value)
+{
+    my_semaphore->sem_value = value;
+    pthread_mutex_init(&my_semaphore->mutex, NULL);
+    pthread_cond_init(&my_semaphore->counter, NULL);
+    return 0;
+}
+void sem_post(sem_t *my_semaphore)
+{
+    pthread_mutex_lock(&my_semaphore->mutex);
+    my_semaphore->sem_value++;
+    pthread_cond_signal(&my_semaphore->counter);
+    pthread_mutex_unlock(&my_semaphore->mutex);
+}
+void sem_wait(sem_t *my_semaphore)
+{
+    pthread_mutex_lock(&my_semaphore->mutex);
+    while (my_semaphore->sem_value == 0)
+    {
+        pthread_cond_wait(&my_semaphore->counter, &my_semaphore->mutex);
+        /*unlock wait relock mutex*/
+    }
+    my_semaphore->sem_value--;
+    pthread_mutex_unlock(&my_semaphore->mutex);
+}
 
 int num_forks;
 //Max 50 philosophers
@@ -10,8 +45,8 @@ int state[MAX]; //0 while eating 1 when ready to eat
 int phil[MAX];
 
 sem_t semaphore_array[MAX];
-sem_t bowl1,bowl2;
-sem_t fork_mutex;
+sem_t *bowl1, bowl2;
+sem_t *fork_mutex;
 
 void setValues()
 {
@@ -20,7 +55,8 @@ void setValues()
 }
 int leftForkNumber(int philosopherNo)
 {
-    return (philosopherNo + 4) % (num_forks);
+
+    return (philosopherNo + num_forks - 1) % (num_forks);
 }
 int rightForkNumber(int philosopherNo)
 {
@@ -31,38 +67,38 @@ void eat(int philosopherNo)
 {
     if (state[philosopherNo] == 1)
     {
+        pid_t tid = gettid();
+
         // If right and left philosopher arent eating
         if (state[rightForkNumber(philosopherNo)] != 0 && state[leftForkNumber(philosopherNo)] != 0)
         {
-
-            printf("Philosopher %d receives fork no. %d and %d\n", philosopherNo + 1, leftForkNumber(philosopherNo) + 1, philosopherNo + 1);
+            printf("Philosopher %d acquires Fork %d and %d\n", tid, leftForkNumber(philosopherNo) + 1, tid);
             sem_wait(&bowl1);
-            printf("Philosopher %d acquired bowl 1\n", philosopherNo + 1);
+            printf("Philosopher %d acquired Bowl 1\n", tid);
             sem_wait(&bowl2);
-            printf("Philosopher %d acquired bowl 2\n", philosopherNo + 1);
+            printf("Philosopher %d acquired Bowl 2\n", tid);
 
-            printf("Philosopher %d eats!\n", philosopherNo + 1);
+            printf("PHILOSOPHER %d EATS\n", tid);
             //eating
             state[philosopherNo] = 0;
             sem_post(&semaphore_array[philosopherNo]);
             // To avoid deadlock in case context switch after releasing bowl 1
-            printf("Philosopher %d released bowl 2\n", philosopherNo + 1);
+            printf("Philosopher %d released bowl 2\n", tid);
 
             sem_post(&bowl2);
-            printf("Philosopher %d released bowl 1\n", philosopherNo + 1);
+            printf("Philosopher %d released bowl 1\n", tid);
 
             sem_post(&bowl1);
-
         }
         //Right
         else if (state[rightForkNumber(philosopherNo)] != 0)
         {
-            printf("Philosopher %d receives fork no. %d\n", philosopherNo + 1, philosopherNo + 1);
+            printf("Philosopher %d acquires Fork %d\n", tid, tid);
         }
         //left
         else if (state[leftForkNumber(philosopherNo)] != 0)
         {
-            printf("Philosopher %d receives fork no. %d\n", leftForkNumber(philosopherNo) + 1, leftForkNumber(philosopherNo) + 1);
+            printf("Philosopher %d acquires Fork %d\n", tid, leftForkNumber(philosopherNo) + 1);
         }
     }
 }
@@ -84,7 +120,9 @@ void forkDown(int philosopherNo)
 
     sem_wait(&fork_mutex);
     state[philosopherNo] = 2;
-    printf("Philosopher %d puts down fork %d and %d \n", philosopherNo + 1, leftForkNumber(philosopherNo) + 1, philosopherNo + 1);
+    pid_t tid = gettid();
+    printf("Philosopher %d puts down Fork %d\n", tid, leftForkNumber(philosopherNo) + 1);
+    printf("Philosopher %d puts down Fork %d\n", tid, philosopherNo + 1);
     eat(leftForkNumber(philosopherNo));
     ;
     eat(rightForkNumber(philosopherNo));
@@ -96,8 +134,6 @@ void *philospherRoutine(void *num)
     while (TRUE)
     {
         int *temp = num;
-        // sleep(1);
-        // bowlUp(*temp);
         sleep(1);
         forkUp(*temp);
         sleep(1);
@@ -119,7 +155,7 @@ int main()
         sem_init(&semaphore_array[i], 0, 0);
         pthread_create(&thread_id[i], NULL, philospherRoutine, &phil[i]);
 
-        printf("Philosopher %d is thinking\n", i + 1);
+        // printf("Philosopher %d is thinking\n", i + 1);
     }
     sem_init(&bowl2, 0, 1);
     for (int i = 0; i < num_forks; ++i)
