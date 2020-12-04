@@ -24,7 +24,17 @@ int n;
 void *thread_func(int no)
 
 {
+    while(1){
+    if(no == n-1)
+    {
 
+        sem_wait(&chopstick[(no + 1) % n]);
+        printf("\nPhilosopher %d  takes fork %d", no,(no + 1) % n);
+
+        sem_wait(&chopstick[no]);
+        printf("\nPhilosopher %d  takes fork %d", no,no);
+    }
+    else{
 
         sem_wait(&chopstick[no]);
         printf("\nPhilosopher %d  takes fork %d", no,no);
@@ -32,16 +42,17 @@ void *thread_func(int no)
 
         sem_wait(&chopstick[(no + 1) % n]);
         printf("\nPhilosopher %d  takes fork %d", no,(no + 1) % n);
-
-        sem_wait(&lock);
+    }
+        // sem_wait(&lock);
         printf("\nPhilosopher %d –> Begin eating", no);
         printf("\nPhilosopher %d –> Finish eating\n", no);
-        sem_post(&lock);
+        // sem_post(&lock);
         sem_post(&chopstick[no]);
 
         sem_post(&chopstick[(no + 1) % n]);
-
-    pthread_exit(NULL);
+    // pthread_exit(NULL);
+    
+    }
 }
 
 int main()
@@ -95,35 +106,10 @@ int main()
 
     {
 
-        res = pthread_join(a_thread[i], NULL);
-
-        if (res != 0)
-
-        {
-
-            perror("semaphore join failed");
-
-            exit(1);
-        }
+        pthread_join(a_thread[i], NULL);
     }
 
     printf("\n \n thread join succesfull\n");
-
-    for (i = 0; i < n; ++i)
-
-    {
-
-        res = sem_destroy(&chopstick[i]);
-
-        if (res == -1)
-
-        {
-
-            perror("semaphore destruction failed");
-
-            exit(1);
-        }
-    }
 
     exit(0);
 }
