@@ -5,16 +5,17 @@
 // #include <semaphore.h>
 #define TRUE 1
 #define MAX 50
-
 typedef struct sem_t
-{
+{   
     ssize_t sem_value;
-    pthread_cond_t counter;
-    pthread_mutex_t mutex;
+    pthread_cond_t counter;  /*To provide functionality of locks*/
+    pthread_mutex_t mutex; /*To provide functionality of locks*/
 } sem_t;
 
 int sem_init(sem_t *my_semaphore, int pshared, int value)
-{
+{   
+    /* Function for the initialisation of the semaphores and setting the value of the condition variables
+    */
     my_semaphore->sem_value = value;
     pthread_mutex_init(&my_semaphore->mutex, NULL);
     pthread_cond_init(&my_semaphore->counter, NULL);

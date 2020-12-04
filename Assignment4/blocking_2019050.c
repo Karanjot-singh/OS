@@ -7,14 +7,16 @@
 #define MAX 50
 
 typedef struct sem_t
-{
+{   
     ssize_t sem_value;
-    pthread_cond_t counter;
-    pthread_mutex_t mutex;
+    pthread_cond_t counter;  /*To provide functionality of locks*/
+    pthread_mutex_t mutex; /*To provide functionality of locks*/
 } sem_t;
 
 int sem_init(sem_t *my_semaphore, int pshared, int value)
-{
+{   
+    /* Function for the initialisation of the semaphores and setting the value of the condition variables
+    */
     my_semaphore->sem_value = value;
     pthread_mutex_init(&my_semaphore->mutex, NULL);
     pthread_cond_init(&my_semaphore->counter, NULL);
@@ -22,6 +24,8 @@ int sem_init(sem_t *my_semaphore, int pshared, int value)
 }
 void sem_post(sem_t *my_semaphore)
 {
+    //sem_post increments the count also wake up any threads blocked/sleeping inside the condition variable. 
+    // lock and unlock the mutex so only one thread can be inside the critical section at a time.
     pthread_mutex_lock(&my_semaphore->mutex);
     my_semaphore->sem_value++;
     pthread_cond_signal(&my_semaphore->counter);
@@ -29,6 +33,7 @@ void sem_post(sem_t *my_semaphore)
 }
 void sem_wait(sem_t *my_semaphore)
 {
+    // sem_wait makes thread sleep if the semaphore’s count is less than zero, also critical section is saved by a mutex
     pthread_mutex_lock(&my_semaphore->mutex);
     while (my_semaphore->sem_value == 0)
     {
@@ -73,9 +78,9 @@ void eat(int philosopherNo)
         if (state[rightForkNumber(philosopherNo)] != 0 && state[leftForkNumber(philosopherNo)] != 0)
         {
             printf("Philosopher %d acquires Fork %d and %d\n", tid, leftForkNumber(philosopherNo) + 1, tid);
-            sem_wait(&bowl1);
+            sem_wait(&bowl1); //Condition for picking up bowl 1 only 1 thread at a time 
             printf("Philosopher %d acquired Bowl 1\n", tid);
-            sem_wait(&bowl2);
+            sem_wait(&bowl2);  //Condition for picking up bowl 2 only 1 thread at a time 
             printf("Philosopher %d acquired Bowl 2\n", tid);
 
             printf("PHILOSOPHER %d EATS\n", tid);
@@ -120,7 +125,7 @@ void forkDown(int philosopherNo)
 
     sem_wait(&fork_mutex);
     state[philosopherNo] = 2;
-    pid_t tid = gettid();
+    pid_t tid = gettid(); // To get the thread id
     printf("Philosopher %d puts down Fork %d\n", tid, leftForkNumber(philosopherNo) + 1);
     printf("Philosopher %d puts down Fork %d\n", tid, philosopherNo + 1);
     eat(leftForkNumber(philosopherNo));
@@ -131,6 +136,7 @@ void forkDown(int philosopherNo)
 }
 void *philospherRoutine(void *num)
 {
+    //routine of each threads
     while (TRUE)
     {
         int *temp = num;
