@@ -4,3 +4,14 @@ pthread_cond_signal() wakes up exactly one thread among the threads that are blo
 pthread_cond_wait atomically unlocks the mutex (as per pthread_unlock_mutex) and waits for the condition variable cond to be signaled. The thread execution is suspended and does not consume any CPU time until the condition variable is signaled. The mutex must be locked by the calling thread on entrance to pthread_cond_wait. Before returning to the calling thread, pthread_cond_wait re-acquires mutex (as per pthread_lock_mutex).
 
 The code for V() does not change (it still calls pthread_cond_signal()). However, the code for P() now uses a counter (updated inside the critical section) to record how many threads are waiting on the condition variable. If a thread wakes up, it re-tests both the semaphore value and the invariant to determine whether it should proceed or it has been awakened spuriously and needs to block again.
+
+The mutex object referenced by mutex shall be locked by calling pthread_mutex_lock(). If the mutex is already locked, the calling thread shall block until the mutex becomes available
+
+        while (pthread_mutex_trylock(&mutex) != 0) {
+            // wait - treated as spin lock in this example
+        } 
+
+
+The pthread_mutex_trylock() function attempts to acquire ownership of the mutex specified without blocking the calling thread. If the mutex is currently locked by another thread, the call to pthread_mutex_trylock() returns an error of EBUSY.
+
+A failure of EDEADLK indicates that the mutex is already held by the calling thread.

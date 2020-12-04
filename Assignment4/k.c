@@ -8,27 +8,21 @@ typedef struct
     pthread_mutex_t lock;
     pthread_cond_t wait;
     int counter;
-    int waiters;
+    int waiting_threads;
 } my_semaphore;
 
-my_semaphore *s;
-
-
-my_semaphore *InitSem(int count)
+void sem_init(my_semaphore *s, int count)
 {
-    my_semaphore *s;
-
     s = (my_semaphore *)malloc(sizeof(my_semaphore));
     if (s == NULL)
     {
-        return (NULL);
+        perror("Error: ");
+        return;
     }
+    s->waiting_threads = 0;
     s->counter = count;
-    s->waiters = 0;
     pthread_cond_init(&(s->wait), NULL);
     pthread_mutex_init(&(s->lock), NULL);
-
-    return (s);
 }
 
 void P(my_semaphore *s)
@@ -42,11 +36,11 @@ void P(my_semaphore *s)
         /*
                  * maintain my_semaphorephore invariant
                  */
-        if (s->waiters < (-1 * s->counter))
+        if (s->waiting_threads < (-1 * s->counter))
         {
-            s->waiters++;
+            s->waiting_threads++;
             pthread_cond_wait(&(s->wait), &(s->lock));
-            s->waiters--;
+            s->waiting_threads--;
         }
         else
         {
@@ -74,41 +68,33 @@ void V(my_semaphore *s)
     pthread_mutex_unlock(&(s->lock));
 }
 
+void *thread()
+{
+    // //wait
+    // P(s);
+    // printf("\nEntered..\n");
 
+    // //critical section
+    // sleep(4);
 
-void* thread() 
-{ 
-    //wait 
-    P(s); 
-    printf("\nEntered..\n"); 
-  
-    //critical section 
-    sleep(4); 
-      
-    //signal 
-    printf("\nJust Exiting...\n"); 
-    V(s); 
-} 
-  
-  
-int main() 
-{ 
-    s = (my_semaphore *)malloc(sizeof(my_semaphore));
-    if (s == NULL)
-    {
-        return (NULL);
-    }
-    s->counter = 1;
-    s->waiters = 0;
+    // //signal
+    // printf("\nJust Exiting...\n");
+    // V(s);
+}
+
+int main()
+{
+
+    my_semaphore *s;    
     pthread_cond_init(&(s->wait), NULL);
     pthread_mutex_init(&(s->lock), NULL);
-    // sem_init(&s, 0, 1); 
-    pthread_t t1,t2; 
-    pthread_create(&t1,NULL,thread,NULL); 
-    sleep(2); 
-    pthread_create(&t2,NULL,thread,NULL); 
-    pthread_join(t1,NULL); 
-    pthread_join(t2,NULL); 
-    // sem_destroy(&s); 
-    return 0; 
-} 
+    // sem_init(&s, 0, 1);
+    pthread_t t1, t2;
+    pthread_create(&t1, NULL, thread, NULL);
+    sleep(2);
+    pthread_create(&t2, NULL, thread, NULL);
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+    // sem_destroy(&s);
+    return 0;
+}
