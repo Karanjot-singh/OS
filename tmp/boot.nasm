@@ -10,8 +10,8 @@ main:
     mov sp, bp
 
     ; PRINTING in 16 BIT MODE
-    ; mov bx, MSG_1
-    ; call print16
+     mov bx, MSG_1
+     call print16
 
     call switch_to_pm
 
@@ -45,7 +45,6 @@ switch_to_pm:
 
 
 [ BITS 32 ]
-%include "print32.nasm"
 %include "set_seg_register.nasm"
 
 ProtectedModeCode:
@@ -72,12 +71,7 @@ halt:
     cli
     hlt
     jmp halt
-    ;mov rax, [0x00000043]
-    ;hlt
-
-MSG_2 db "Hello world",0
-MSG_1 db "In real", 0
-MSG_3 db "I'm in the long mode"
+MSG_1 db "Hello world", 0
 
 times 510 - ($-$$) db 0 
 dw 0xaa55
