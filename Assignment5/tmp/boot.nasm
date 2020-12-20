@@ -35,32 +35,27 @@ switch_to_pm:
     mov eax, cr0
     or eax, 0x1 ;
     mov cr0, eax
-
-    ; I should ENABLE A20 here but I didn't disable :)
-
     ;==============================================================================
     ;ENTERS PROTECTED MODE 
 
-    jmp GDT32.Code:ProtectedModeCode
+    jmp GDT32.Code:PrintValueCR0
 
 
 [ BITS 32 ]
 %include "set_seg_register.nasm"
 
-ProtectedModeCode:
+PrintValueCR0:
 
     ; Setting up all the segment value for protected mode
     mov ax, GDT32.Data
     call set_seg_register
 
     ; Printing in Protected Mode
-     ;mov edi, 0xb8000
-     ;mov ebx, MSG_2
      mov edx, cr0     
     mov ecx, 32          ; 32 bits in a dword
-    mov ebx, 000B8000h
+    mov ebx, 0xB8640     ; Display screen offset
 .loop2:
-    mov eax, 00000130h   ; BlueOnBlack "0"
+    mov eax, 00000230h   ; BlueOnBlack "0"
     shl edx, 1           ; Top bit to the carry flag
     adc eax, 0           ; -> AL="0" or AL="1"
     mov [ebx], ax
