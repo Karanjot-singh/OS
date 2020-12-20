@@ -6,18 +6,20 @@ start:
 	mov si, msg             ; Source index now points to Hello world
 	mov ah, 0x0E            ; Informs that we wnt to print chars
 
-	.loop	
-	lodsb                   ; Loads SI into AL and increments SI [next char]
+.loop:	
 	; instruction to load a string byte at DS:SI register
+	lodsb                   ; Loads SI into AL and increments SI [next char] 
+
 	or al, al               ; Checks if the loaded string ended by al==0?
 	jz halt                 ; halts loop if al == 0 and hence end
 	int 0x10                ; Else run bios interrupt 0x10 for video output service
 	jmp .loop               ; loop continuation condition
 
 halt:
-	hlt                     ;
-msg:	db "Hello, World!", 0   ;
+	hlt
 
-;; Magic numbers
-times 510 - ($ - $$) db 0 	; adds 0 to remaining 510 bytes
-dw 0xAA55 					; TO mark bootable
+msg:	db " Hello World ",0;
+
+							;Magic numbers for booting
+times 510 - ( $ - $$ ) db 0 	; adds 0 to remaining 510 bytes
+dw 0xAA55 					; To mark bootable
