@@ -38,15 +38,6 @@ int main(int argc, char *argv[])
         // fclose(fp1);
         printf("File %s Created Successfully!\n", argv[1]);
         f_create();
-        while (1)
-        {
-
-            c = getchar();
-            if (c == 'E')
-            {
-                return 0;
-            }
-        }
     }
     //Read file if exists
     printf("File %s Opened Successfully!\n", argv[1]);
@@ -57,7 +48,7 @@ int main(int argc, char *argv[])
         printf("%c", c);
     }
     fp1 = fopen(file_name, "a+");
-    printf("\nS - save D - delete E - exit Q-close without save \n");
+    printf("\nS - save D - delete E - exit Q-close without save press enter\n");
     char achar;
     while (1)
     {
@@ -73,6 +64,8 @@ int main(int argc, char *argv[])
             printf("\n\t");
             fputc(achar, fp1);
             fclose(fp1);
+            printf("File saved Successfuly");
+
             return 0;
         }
         if (achar == 'D')
@@ -81,6 +74,8 @@ int main(int argc, char *argv[])
         }
         if (achar == 'E')
         {
+            printf("Exiting");
+
             return 0;
         }
         else
@@ -112,9 +107,11 @@ void f_create()
                 putc(c, fp1);
             }
             fclose(fp1);
+            printf("File saved Successfuly");
+
             c = 'E';
         }
-        if (c == 'Q' || c == 'E')
+        if (c == 'Q')
         {
             fclose(fp3);
             if (remove(file_name) == 0)
@@ -124,6 +121,10 @@ void f_create()
             }
             fp3 = fopen(file_name, "w");
             fclose(fp3);
+        }
+        else if (c == 'E')
+        {
+            return;
         }
     }
 }
