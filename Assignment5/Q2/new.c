@@ -2,144 +2,67 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <unistd.h>
-#include <stdio.h>   
-#include <string.h>  //used for strcpy function
-#include <stdlib.h>  //used for system("clear") function
-#include <termios.h> //used for getch function
-#include <unistd.h>  //used for getch function
-#include<stdio.h>
+
+char file_name[50], e, c;
 int i, j, ec, fg, ec2;
-char fn[20], e, c;
-FILE *fp1, *fp2, *fp;
-void Create();
-void Append();
-void Delete();
-void Display();
-void main()
+FILE *fp1, *fp2, *fp, *fp3;
+
+void f_create();
+void f_del();
+
+int main(int argc, char *argv[])
 {
-    do
+    if (argc > 1)
     {
-        system("clear");
-        printf("\n\t\t***** TEXT EDITOR *****");
-        printf("\n\n\tMENU:\n\t-----\n ");
-        printf("\n\t1.CREATE\n\t2.DISPLAY\n\t3.APPEND\n\t4.DELETE\n\t5.EXIT\n");
-        printf("\n\tEnter your choice: ");
-        scanf("%d", &ec);
-        switch (ec)
-        {
-        case 1:
-            Create();
-            break;
-        case 2:
-            Display();
-            break;
-        case 3:
-            Append();
-            break;
-        case 4:
-            Delete();
-            break;
-        case 5:
-            exit(0);
-        }
-    } while (1);
-}
-void Create()
-{
-    fp1 = fopen("temp.txt", "w");
-    printf("\n\tEnter the text and press '.' to save\n\n\t");
-    while (1)
-    {
-        c = getchar();
-        fputc(c, fp1);
-        if (c == '.')
-        {
-            fclose(fp1);
-            printf("\n\tEnter then new filename: ");
-            scanf("%s", fn);
-            fp1 = fopen("temp.txt", "r");
-            fp2 = fopen(fn, "w");
-            while (!feof(fp1))
-            {
-                c = getc(fp1);
-                putc(c, fp2);
-            }
-            fclose(fp2);
-            break;
-        }
-    }
-}
-void Display()
-{
-    printf("\n\tEnter the file name: ");
-    scanf("%s", fn);
-    fp1 = fopen(fn, "r");
-    if (fp1 == NULL)
-    {
-        printf("\n\tFile not found!");
-        return;
-    }
-    while (!feof(fp1))
-    {
-        c = getc(fp1);
-        printf("%c", c);
-    }
-}
-void Delete()
-{
-    printf("\n\tEnter the file name: ");
-    scanf("%s", fn);
-    fp1 = fopen(fn, "r");
-    if (fp1 == NULL)
-    {
-        printf("\n\tFile not found!");
-        return;
-    }
-    fclose(fp1);
-    if (remove(fn) == 0)
-    {
-        printf("\n\n\tFile has been deleted successfully!");
-        return;
+        strcpy(file_name, argv[1]);
     }
     else
-        printf("\n\tError!\n");
-}
-void Append()
-{
-    printf("\n\tEnter the file name: ");
-    scanf("%s", fn);
-    fp1 = fopen(fn, "r");
+    {
+        strcpy(file_name, "a.txt");
+    }
+
+    fp1 = fopen(file_name, "a+");
     if (fp1 == NULL)
     {
-        printf("\n\tFile not found!");
+        f_create();
         fclose(fp1);
-        return;
+        return 0;
     }
     while (!feof(fp1))
     {
         c = getc(fp1);
         printf("%c", c);
     }
-    fclose(fp1);
-    printf("\n\tType the text and press 'Ctrl+S' to append.\n");
-    fp1 = fopen(fn, "a");
+    printf("\nS - save D - delete E - exit Q-close without save \n");
     char achar;
     while (1)
-    {   
-        scanf(" %c",&achar);
+    {
+        scanf(" %c", &achar);
         if (achar == 'Q')
         {
             fclose(fp1);
-            return;
+            return 0;
         }
         if (achar == 'S')
         {
             achar = '\n';
             printf("\n\t");
             fputc(achar, fp1);
-                        fclose(fp1);
-            return;
+            fclose(fp1);
+            return 0;
+        }
+        if (achar == 'D')
+        {
+            f_del();
+        }
+        if (achar == 'E')
+        {
+            return 0;
         }
         else
         {
@@ -147,4 +70,5 @@ void Append()
             fputc(achar, fp1);
         }
     }
+    return 0;
 }
