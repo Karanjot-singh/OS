@@ -16,6 +16,7 @@ void f_create();
 void f_del();
 void lock(FILE *fp);
 void unlock(FILE *fp);
+void check();
 struct flock fl = {F_WRLCK, SEEK_SET, 0, 0, 0};
 
 int main(int argc, char *argv[])
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
 
     printf("\nS - save D - delete E - exit Q-close without save press enter\n");
     char achar;
-    // check();
+    check();
     while (1)
     {
         scanf(" %c", &achar);
@@ -163,9 +164,8 @@ void f_del()
 void lock(FILE *fp)
 {
 
-    fl.l_type = F_RDLCK;
+    fl.l_type = F_WRLCK;
     int fd = fileno(fp);
-    printf("\nWarning! Multiple editors open!\n");
 
     if (fcntl(fd, F_SETLK, &fl) == -1)
     {
@@ -182,7 +182,7 @@ void unlock(FILE *fp)
         printf("File unlocked\n");
     }
 }
-// void check()
-// {
-//     fl.l_type == F_UNLCK ? printf("") : printf("Other proc writing");
-// }
+void check()
+{
+    // fl.l_type == F_UNLCK ? printf(" ") : printf("Warning! Multiple editors open!\n");
+}
