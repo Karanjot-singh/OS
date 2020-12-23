@@ -14,6 +14,8 @@ FILE *fp1, *fp2, *fp, *fp3;
 
 void f_create();
 void f_del();
+void lock(FILE *fp);
+void unlock(FILE *fp);
 struct flock fl = {F_WRLCK, SEEK_SET, 0, 0, 0};
 
 int main(int argc, char *argv[])
@@ -22,6 +24,7 @@ int main(int argc, char *argv[])
     if (argc == 2)
     {
         strcpy(file_name, argv[1]);
+        fl.l_type = F_RDLCK;
     }
     else if (argc > 2)
     {
@@ -33,6 +36,7 @@ int main(int argc, char *argv[])
     }
     // to read and append the file's contents
     fp1 = fopen(file_name, "r");
+    //here lock
     if (fp1 == NULL)
     {
         //to create file if doesn't exist
@@ -40,6 +44,7 @@ int main(int argc, char *argv[])
         printf("File %s Created Successfully!\n", argv[1]);
         f_create();
     }
+
     //Read file if exists
     printf("File %s Opened Successfully!\n", argv[1]);
 
@@ -49,17 +54,17 @@ int main(int argc, char *argv[])
         printf("%c", c);
     }
     fp1 = fopen(file_name, "a+");
-    //here lock
+    lock(fp1);
+
     printf("\nS - save D - delete E - exit Q-close without save press enter\n");
     char achar;
     // check();
-    // lock(fp1);
     while (1)
     {
         scanf(" %c", &achar);
         if (achar == 'Q')
-        {   
-            // unlock(fp1);
+        {
+            unlock(fp1);
             fclose(fp1);
             return 0;
         }
@@ -69,8 +74,8 @@ int main(int argc, char *argv[])
             printf("\n\t");
             fputc(achar, fp1);
             fclose(fp1);
-            printf("File saved Successfuly");
-            //unlock()
+            printf("File saved Successfuly\n");
+            unlock(fp1);
             return 0;
         }
         if (achar == 'D')
@@ -79,7 +84,7 @@ int main(int argc, char *argv[])
         }
         if (achar == 'E')
         {
-            // unlock(fp1);
+            unlock(fp1);
             printf("Exiting");
 
             return 0;
@@ -97,6 +102,7 @@ void f_create()
     printf("\nS - save D - delete E - exit Q-close without save \n");
 
     fp3 = fopen("temp.txt", "w");
+    // lock(fp3);
     while (1)
     {
         c = getchar();
@@ -112,8 +118,9 @@ void f_create()
                 c = getc(fp3);
                 putc(c, fp1);
             }
+            // unlock(fp1);
             fclose(fp1);
-            printf("File saved Successfuly");
+            printf("File saved Successfuly\n");
 
             c = 'E';
         }
@@ -122,11 +129,13 @@ void f_create()
             fclose(fp3);
             if (remove(file_name) == 0)
             {
-                printf("File deleted Successfuly");
+                printf("File deleted Successfuly\n");
                 return;
             }
             fp3 = fopen(file_name, "w");
+            // unlock(fp3);
             fclose(fp3);
+            c = 'E';
         }
         else if (c == 'E')
         {
@@ -145,32 +154,35 @@ void f_del()
     fclose(fp1);
     if (remove(file_name) == 0)
     {
-        printf("File deleted Successfuly");
+        printf("File deleted Successfuly\n");
         return;
     }
     else
         perror("Error: ");
 }
-// void lock(FILE *fp)
-// {
-//     fl.l_pid = getpid();
-//     fl.l_type = F_RDLCK;
-//     if (fcntl(fp, F_SETLKW, &fl) == -1)
-//     {
-//         perror("fcntl");
-//         exit(1);
-//     }
-// }
-// void unlock(FILE *fp)
-// {
-//     fl.l_type = F_UNLCK; /* set to unlock same region */
+void lock(FILE *fp)
+{
 
-//     if (fcntl(fp, F_SETLK, &fl) == -1)
-//     {
-//         perror("fcntl");
-//         exit(1);
-//     }
-// }
-// void check(){
-// fl.l_type == F_UNLCK ? printf(""): printf("Other proc writing") ;
+    fl.l_type = F_RDLCK;
+    int fd = fileno(fp);
+    printf("\nWarning! Multiple editors open!\n");
+
+    if (fcntl(fd, F_SETLK, &fl) == -1)
+    {
+        printf("\nWarning! Multiple editors open!\n");
+    }
+}
+void unlock(FILE *fp)
+{
+    fl.l_type = F_UNLCK; /* set to unlock same region */
+
+    int fd = fileno(fp);
+    if (fcntl(fd, F_SETLK, &fl) == -1)
+    {
+        printf("File unlocked\n");
+    }
+}
+// void check()
+// {
+//     fl.l_type == F_UNLCK ? printf("") : printf("Other proc writing");
 // }

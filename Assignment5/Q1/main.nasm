@@ -62,7 +62,7 @@ PrintValueCR0:
     ;AX has values for segments
     ;32 mode        
     ; Flag for print
-     mov edx , cr0     
+    mov edx , cr0     
     mov ecx , 32             
     ; 32 bits reqd 
     mov ebx , 0xB8640        
